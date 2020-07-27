@@ -10,6 +10,7 @@ namespace matrix
         public:
             MatrixItem();
             MatrixItem(int data);
+            ~MatrixItem();
             void set_data(int data);
             int get_data();
         private:

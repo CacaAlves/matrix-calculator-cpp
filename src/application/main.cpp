@@ -3,8 +3,8 @@
 
 int main(int argc, char const *argv[])
 {
-    main_utils::MainUtils *utils = new main_utils::MainUtils();
-    utils->welcome_message();
+    main_utils::MainUtils utils;
+    utils.welcome_message();
 
     bool running = true;
 
@@ -12,21 +12,11 @@ int main(int argc, char const *argv[])
     {
         do
         {
-            utils->print_receive_menu();
-        }
-        while (!(utils->is_menu_a_valid_number()));
+            utils.print_receive_menu();
+        } while (!(utils.is_menu_a_valid_number()));
 
-        switch (utils->get_menu())
-        {
-        case -1:
-            running = false;
-            break;
-        
-        default:
-            break;
-        }
+        running = utils.perform_action_menu();
     }
-
 
     return 1;
 }

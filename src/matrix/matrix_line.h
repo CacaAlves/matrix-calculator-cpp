@@ -12,15 +12,16 @@ namespace matrix
     {
     public:
 
-        std::vector<MatrixItem *> line;
 
         MatrixLine();
         ~MatrixLine();
         void add_element(int value);
         void set_element(int value, int index);
-        MatrixItem *get_element(int index);
+        matrix::MatrixItem *get_element(int index);
+        int get_columns_quantity();
         
     private:
+        std::vector<matrix::MatrixItem *> *line;
     };
 
 } // namespace matrix

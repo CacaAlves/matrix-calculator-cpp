@@ -7,6 +7,11 @@ matrix::MatrixItem::MatrixItem(int data)
     this->data = data;
 }
 
+matrix::MatrixItem::~MatrixItem()
+{
+    std::cout << "MatrixItem deleted\n";
+}
+
 void matrix::MatrixItem::set_data(int data)
 {
     this->data = data;
