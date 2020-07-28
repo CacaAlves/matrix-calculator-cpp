@@ -24,6 +24,7 @@ bool main_utils::MainUtils::is_menu_a_valid_number()
     case 2:
     case 3:
     case 4:
+    case 8:
     case 9:
     case 10:
         isAValidNumber = true;
@@ -43,14 +44,11 @@ void main_utils::MainUtils::print_receive_menu()
     std::cout << main_utils::MainUtils::tab << "Enter a number.\n";
     std::cout << main_utils::MainUtils::tab << "1 - enter a matrix.\n";
     std::cout << main_utils::MainUtils::tab << "2 - print matrix.\n";
-    std::cout << main_utils::MainUtils::tab << "3 - store a matrix in the hard disk.\n";
-    std::cout << main_utils::MainUtils::tab << "4 - read a matrix from the hard disk.\n";
-    std::cout << main_utils::MainUtils::tab << "9 - delete matrix.\n";
-    std::cout << main_utils::MainUtils::tab << "10 - delete matrix from storage.\n";
+    std::cout << main_utils::MainUtils::tab << "8 - delete matrix.\n";
+    std::cout << main_utils::MainUtils::tab << "9 - manage storage.\n";
     std::cout << main_utils::MainUtils::tab << "11 - hints.\n";
     std::cout << main_utils::MainUtils::tab << "0 - exit program.\n";
-    // std::cout << "Menu\n";
-    // std::cout << "Menu\n";
+
     std::cout << std::endl
               << main_utils::MainUtils::tab;
     std::cin >> this->menu;
@@ -82,7 +80,7 @@ main_utils::ActionResponse *main_utils::MainUtils::perform_action_menu()
     case 1:
     {
         std::string newMatrixName = this->receive_matrix();
-        std::string responseMessage = "\n" + main_utils::MainUtils::tab + "The new matrix was stored in the variable: " + newMatrixName + "\n";
+        std::string responseMessage = "\n" + main_utils::MainUtils::tab + "The new matrix was stored in the constant: " + newMatrixName + "\n";
         response->set_action_response(responseMessage, true);
 
         break;
@@ -94,36 +92,102 @@ main_utils::ActionResponse *main_utils::MainUtils::perform_action_menu()
 
         break;
     }
-    case 3:
+    case 8:
     {
-        std::string responseMessage = this->store_matrix_hard_disk();
-        response->set_action_response(responseMessage, true);
-        break;
-    }
-    case 4:
-    {
-        this->read_matrix_hard_disk();
+        this->delete_matrix_from_matrices();
         std::string responseMessage = "";
         response->set_action_response(responseMessage, true);
         break;
     }
     case 9:
     {
-        // this->delete_matrix_from_matrices();
-        std::string responseMessage = "";
-        response->set_action_response(responseMessage, true);
-        break;
-    }
-    case 10:
-    {
-        // this->delete_matrix_from_storage();
-        std::string responseMessage = "";
-        response->set_action_response(responseMessage, true);
+        response = this->manage_hard_disk();
         break;
     }
     case 11:
     {
         this->print_hints();
+        std::string responseMessage = "";
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    default:
+        break;
+    }
+
+    return response;
+}
+
+void main_utils::MainUtils::print_receive_menu_hard_disk()
+{
+    std::cout << std::endl
+              << main_utils::MainUtils::tab << "Menu storage\n\n";
+    std::cout << main_utils::MainUtils::tab << "Enter a number.\n";
+    std::cout << main_utils::MainUtils::tab << "1 - store a matrix in the storage.\n";
+    std::cout << main_utils::MainUtils::tab << "2 - read a matrix from the storage.\n";
+    std::cout << main_utils::MainUtils::tab << "3 - delete matrix from the storage.\n";
+
+    std::cout << std::endl
+              << main_utils::MainUtils::tab;
+    std::cin >> this->menuHardDisk;
+
+    std::cout << std::endl;
+}
+
+bool main_utils::MainUtils::is_menu_hard_disk_a_valid_number()
+{
+    bool isAValidNumber;
+
+    switch (this->menuHardDisk)
+    {
+    case 1:
+    case 2:
+    case 3:
+        isAValidNumber = true;
+        break;
+    default:
+        isAValidNumber = false;
+        break;
+    }
+
+    return isAValidNumber;
+}
+
+main_utils::ActionResponse *main_utils::MainUtils::manage_hard_disk()
+{
+    do
+    {
+        this->print_receive_menu_hard_disk();
+
+    } while (!(this->is_menu_hard_disk_a_valid_number()));
+
+    system("clear");
+
+    ActionResponse *response = perform_action_menu_hard_disk();
+    return response;
+}
+
+main_utils::ActionResponse *main_utils::MainUtils::perform_action_menu_hard_disk()
+{
+    main_utils::ActionResponse *response = new main_utils::ActionResponse;
+
+    switch (this->menuHardDisk)
+    {
+    case 1:
+    {
+        std::string responseMessage = this->store_matrix_hard_disk();
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 2:
+    {
+        std::string responseMessage = this->read_matrix_hard_disk();
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 3:
+    {
+        this->delete_matrix_hard_disk();
         std::string responseMessage = "";
         response->set_action_response(responseMessage, true);
         break;
@@ -198,8 +262,6 @@ matrix::Matrix *main_utils::MainUtils::find_matrix_in_matrices(std::string name)
 
 std::string main_utils::MainUtils::receive_matrix()
 {
-    system("clear");
-
     std::cout << main_utils::MainUtils::tab << "Input the number of lines and then the number columns of the new matrix.\n";
 
     int lines, columns;
@@ -318,7 +380,7 @@ std::string main_utils::MainUtils::store_matrix_hard_disk()
 
     std::string matrixName;
 
-    std::cout << main_utils::MainUtils::tab << "Input a variable name to store: ";
+    std::cout << main_utils::MainUtils::tab << "Input a constant name to store: ";
 
     std::cin >> matrixName;
 
@@ -334,7 +396,7 @@ std::string main_utils::MainUtils::store_matrix_hard_disk()
     else
     {
         std::string fileName;
-        std::cout << main_utils::MainUtils::tab << "Input the name of the matrix in the hard disk: ";
+        std::cout << main_utils::MainUtils::tab << "Input the name of the matrix in the storage: ";
         std::cin >> fileName;
 
         matrix::MatrixStorage *matrixInStorageFormat = new matrix::MatrixStorage;
@@ -359,17 +421,43 @@ std::string main_utils::MainUtils::store_matrix_hard_disk()
     return strToReturn;
 }
 
-bool main_utils::MainUtils::read_matrix_hard_disk()
+std::string main_utils::MainUtils::read_matrix_hard_disk()
 {
     bool ableToRead;
+    std::string strToReturn;
 
-    return ableToRead;
+    std::string matrixName;
+
+    std::cout << main_utils::MainUtils::tab << "Input a matrix name to read: ";
+
+    std::cin >> matrixName;
+
+    matrix::MatrixStorage *matrixInStorageFormat = new matrix::MatrixStorage;
+    matrixInStorageFormat->set_file_name(matrixName);
+
+    matrix::Matrix *readMatrix = matrixInStorageFormat->read_from_hard_disk();
+
+    ableToRead =  !(readMatrix == NULL);
+    
+    if (ableToRead)
+    {
+        std::string readMatrixNamethis = this->insert_matrix(readMatrix);
+        strToReturn = main_utils::MainUtils::tab + "The new matrix was stored in the constant: " + readMatrixNamethis + "\n";
+    }
+    else
+    {
+        strToReturn = main_utils::MainUtils::tab + "Error reading\n";
+    }
+
+    return strToReturn;
 }
 
-bool main_utils::MainUtils::delete_matrix_from_matrices()
+std::string main_utils::MainUtils::delete_matrix_hard_disk()
+{
+
+}
+
+std::string main_utils::MainUtils::delete_matrix_from_matrices()
 {
 }
 
-bool main_utils::MainUtils::delete_matrix_from_storage()
-{
-}

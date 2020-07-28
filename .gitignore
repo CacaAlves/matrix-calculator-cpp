@@ -33,3 +33,6 @@
 
 #json
 *.json
+
+#files
+*.txt

@@ -1,7 +1,6 @@
 #ifndef MAIN_UTILS
 #define MAIN_UTILS
 
-
 #include <iostream>
 #include <stdlib.h>
 #include <map>
@@ -36,6 +35,7 @@ namespace main_utils
         void clear_matrices();
         void delete_matrix(std::string name);
         int menu;
+        int menuHardDisk;
         long long int str_to_number(const std::string str);
         std::string insert_matrix(matrix::Matrix *matrix);
         matrix::Matrix *find_matrix_in_matrices(std::string name);
@@ -43,9 +43,13 @@ namespace main_utils
         std::string print_matrix();
         void print_hints();
         std::string store_matrix_hard_disk();
-        bool read_matrix_hard_disk();
-        bool delete_matrix_from_matrices();
-        bool delete_matrix_from_storage();
+        std::string read_matrix_hard_disk();
+        std::string delete_matrix_hard_disk();
+        std::string delete_matrix_from_matrices();
+        ActionResponse *manage_hard_disk();
+        void print_receive_menu_hard_disk();
+        bool is_menu_hard_disk_a_valid_number();
+        ActionResponse *perform_action_menu_hard_disk();
     };
 } // namespace main_utils
 

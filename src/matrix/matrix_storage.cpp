@@ -66,10 +66,46 @@ bool matrix::MatrixStorage::store_in_hard_disk()
     {
         ableToStore = false;
     }
-    
+
     file.close();
 
     return ableToStore;
+}
+
+matrix::Matrix *matrix::MatrixStorage::read_from_hard_disk()
+{
+    // std::ofstream file(this->fileName, std::ios_base::in);
+    std::string fileName = "./files/" + this->fileName + ".txt";
+    FILE *file = fopen(fileName.c_str(), "r");
+
+    matrix::Matrix *matrix = NULL;
+
+    if (file != NULL)
+    {
+        int linesQuantity, columnsQuantity;
+        fscanf(file, "%d %d", &linesQuantity, &columnsQuantity);
+
+        matrix = new matrix::Matrix(linesQuantity, columnsQuantity);
+    }
+
+    for (int i = 0; i < matrix->get_lines_quantity(); i++)
+    {
+        matrix::MatrixLine *tempLine = new matrix::MatrixLine();
+        matrix->add_line(tempLine);
+
+        for (int j = 0; j < matrix->get_columns_quantity(); j++)
+        {
+            int element;
+            fscanf(file, "%d", &element);
+            tempLine->add_element(element);
+        }
+    }
+
+    matrix->set_current_targed_line(matrix->get_lines_quantity()); //setting the target to the next of the end
+
+    fclose(file);
+    
+    return matrix;
 }
 
 void matrix::MatrixStorage::delete_from_hard_disk()
