@@ -74,7 +74,6 @@ bool matrix::MatrixStorage::store_in_hard_disk()
 
 matrix::Matrix *matrix::MatrixStorage::read_from_hard_disk()
 {
-    // std::ofstream file(this->fileName, std::ios_base::in);
     std::string fileName = "./files/" + this->fileName + ".txt";
     FILE *file = fopen(fileName.c_str(), "r");
 
@@ -104,10 +103,15 @@ matrix::Matrix *matrix::MatrixStorage::read_from_hard_disk()
     matrix->set_current_targed_line(matrix->get_lines_quantity()); //setting the target to the next of the end
 
     fclose(file);
-    
+
     return matrix;
 }
 
-void matrix::MatrixStorage::delete_from_hard_disk()
+void matrix::MatrixStorage::delete_from_hard_disk(std::string fileName)
 {
+    std::string path = "./files/" + fileName + ".txt";
+
+    std::string deleteFileScript = "rm " + path;
+    const char *script1 = deleteFileScript.c_str();
+    system(script1);
 }

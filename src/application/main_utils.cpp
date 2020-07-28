@@ -39,8 +39,8 @@ bool main_utils::MainUtils::is_menu_a_valid_number()
 
 void main_utils::MainUtils::print_receive_menu()
 {
-    std::cout << std::endl
-              << main_utils::MainUtils::tab << "Menu\n\n";
+    std::cout
+        << main_utils::MainUtils::tab << "Menu\n\n";
     std::cout << main_utils::MainUtils::tab << "Enter a number.\n";
     std::cout << main_utils::MainUtils::tab << "1 - enter a matrix.\n";
     std::cout << main_utils::MainUtils::tab << "2 - print matrix.\n";
@@ -112,6 +112,8 @@ main_utils::ActionResponse *main_utils::MainUtils::perform_action_menu()
         break;
     }
     default:
+        std::string responseMessage = main_utils::MainUtils::tab + "Input a valid input\n";
+        response->set_action_response(responseMessage, true);
         break;
     }
 
@@ -126,6 +128,7 @@ void main_utils::MainUtils::print_receive_menu_hard_disk()
     std::cout << main_utils::MainUtils::tab << "1 - store a matrix in the storage.\n";
     std::cout << main_utils::MainUtils::tab << "2 - read a matrix from the storage.\n";
     std::cout << main_utils::MainUtils::tab << "3 - delete matrix from the storage.\n";
+    std::cout << main_utils::MainUtils::tab << "0 - cancel.\n";
 
     std::cout << std::endl
               << main_utils::MainUtils::tab;
@@ -143,6 +146,7 @@ bool main_utils::MainUtils::is_menu_hard_disk_a_valid_number()
     case 1:
     case 2:
     case 3:
+    case 0:
         isAValidNumber = true;
         break;
     default:
@@ -173,6 +177,12 @@ main_utils::ActionResponse *main_utils::MainUtils::perform_action_menu_hard_disk
 
     switch (this->menuHardDisk)
     {
+    case 0:
+    {
+        std::string responseMessage = "";
+        response->set_action_response(responseMessage, true);
+        break;
+    }
     case 1:
     {
         std::string responseMessage = this->store_matrix_hard_disk();
@@ -187,8 +197,7 @@ main_utils::ActionResponse *main_utils::MainUtils::perform_action_menu_hard_disk
     }
     case 3:
     {
-        this->delete_matrix_hard_disk();
-        std::string responseMessage = "";
+        std::string responseMessage = this->delete_matrix_hard_disk();
         response->set_action_response(responseMessage, true);
         break;
     }
@@ -399,7 +408,7 @@ std::string main_utils::MainUtils::store_matrix_hard_disk()
         std::cout << main_utils::MainUtils::tab << "Input the name of the matrix in the storage: ";
         std::cin >> fileName;
 
-        matrix::MatrixStorage *matrixInStorageFormat = new matrix::MatrixStorage;
+        matrix::MatrixStorage *matrixInStorageFormat = new matrix::MatrixStorage();
 
         matrixInStorageFormat->set_matrix_storage(matrix);
         matrixInStorageFormat->set_file_name(fileName);
@@ -432,13 +441,15 @@ std::string main_utils::MainUtils::read_matrix_hard_disk()
 
     std::cin >> matrixName;
 
-    matrix::MatrixStorage *matrixInStorageFormat = new matrix::MatrixStorage;
+    matrix::MatrixStorage *matrixInStorageFormat = new matrix::MatrixStorage();
     matrixInStorageFormat->set_file_name(matrixName);
 
     matrix::Matrix *readMatrix = matrixInStorageFormat->read_from_hard_disk();
 
-    ableToRead =  !(readMatrix == NULL);
-    
+    delete matrixInStorageFormat;
+
+    ableToRead = !(readMatrix == NULL);
+
     if (ableToRead)
     {
         std::string readMatrixNamethis = this->insert_matrix(readMatrix);
@@ -446,7 +457,7 @@ std::string main_utils::MainUtils::read_matrix_hard_disk()
     }
     else
     {
-        strToReturn = main_utils::MainUtils::tab + "Error reading\n";
+        strToReturn = main_utils::MainUtils::tab + "Error reading.\n";
     }
 
     return strToReturn;
@@ -454,10 +465,20 @@ std::string main_utils::MainUtils::read_matrix_hard_disk()
 
 std::string main_utils::MainUtils::delete_matrix_hard_disk()
 {
+    std::string strToReturn;
 
+    std::string matrixName;
+
+    std::cout << main_utils::MainUtils::tab << "Input a matrix name to delete: ";
+
+    std::cin >> matrixName;
+
+    matrix::MatrixStorage::delete_from_hard_disk(matrixName);
+
+    strToReturn = main_utils::MainUtils::tab + "Deleted, if any.\n";
+    return strToReturn;
 }
 
 std::string main_utils::MainUtils::delete_matrix_from_matrices()
 {
 }
-
