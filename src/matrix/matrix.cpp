@@ -27,8 +27,6 @@ matrix::Matrix::~Matrix()
     }
 
     delete (this->lines);
-
-    std::cout << "Matrix destructed\n";
 }
 
 void matrix::Matrix::add_line(matrix::MatrixLine *line)
@@ -85,22 +83,36 @@ void matrix::Matrix::add_item_matrix(const int data)
     line->set_element(data, this->currentTargedColumn);
 }
 
-void matrix::Matrix::print_matrix()
+void matrix::Matrix::print_matrix(bool exitOption)
 {
+    std::cout << std::endl;
+
     for (int i = 0; i < this->linesQuantity; i++)
     {
         for (int j = 0; j < this->columnsQuantity; j++)
         {
             if ((i == this->currentTargedLine && j == this->currentTargedColumn))
             {
+                if (j == 0)
+                {
+                    std::cout << matrix::Matrix::tab;
+                }
                 std::cout << " * ";
             }
             else if ((i > this->currentTargedLine) || (i == this->currentTargedLine && j > this->currentTargedColumn))
             {
+                if (j == 0)
+                {
+                    std::cout << matrix::Matrix::tab;
+                }
                 std::cout << "   ";
             }
             else
             {
+                if (j == 0)
+                {
+                    std::cout << matrix::Matrix::tab;
+                }
                 matrix::MatrixItem *item = this->get_item(i, j);
                 std::cout << " " << std::to_string(item->get_data()) << " ";
             }
@@ -108,13 +120,21 @@ void matrix::Matrix::print_matrix()
 
         std::cout << std::endl;
     }
+
+    if (exitOption)
+    {
+        int exit = 1;
+        std::cout << std::endl << matrix::Matrix::tab << "Input 0 to stop printing\n";
+        while (exit != 0)
+        {
+            std::cout << matrix::Matrix::tab;
+            std::cin >> exit;
+        }
+    }
 }
 
 bool matrix::Matrix::is_in_last_position()
 {
-    bool isLastPosition = (
-        ((this->currentTargedLine) ==  (this->linesQuantity -1 ))
-        &&
-        ((this->currentTargedColumn) == (this->columnsQuantity - 1))
-    );
+    bool isLastPosition = (((this->currentTargedLine) == (this->linesQuantity - 1)) &&
+                           ((this->currentTargedColumn) == (this->columnsQuantity - 1)));
 }

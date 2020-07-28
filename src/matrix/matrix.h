@@ -12,7 +12,7 @@ namespace matrix
     class Matrix
     {
     public:
-
+        const std::string tab = "\t\t\t\t\t\t";
         Matrix();
         Matrix(int linesQuantity, int columnsQuantity);
         ~Matrix();
@@ -26,7 +26,7 @@ namespace matrix
         bool is_square_matrix();
         matrix::MatrixItem *get_item(int line, int column);
         void add_item_matrix(const int data);
-        void print_matrix();
+        void print_matrix(bool exitOption = false);
         bool is_in_last_position();
     private:
         std::vector<matrix::MatrixLine *> *lines;

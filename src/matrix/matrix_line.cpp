@@ -12,7 +12,6 @@ matrix::MatrixLine::~MatrixLine()
         delete item;
     }
     delete (this->line);
-    std::cout << "Line destructed\n";
 }
 
 void matrix::MatrixLine::add_element(int value)
