@@ -19,7 +19,7 @@ namespace matrix
         void set_matrix_storage(matrix::Matrix *matrixToStore);
         void set_file_name(std::string fileName);
         bool store_in_hard_disk();
-        matrix::Matrix *read_from_hard_disk();
+        static matrix::Matrix *read_from_hard_disk(std::string fileName);
         static void delete_from_hard_disk(std::string fileName);
 
     private:

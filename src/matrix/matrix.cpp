@@ -8,6 +8,62 @@ matrix::Matrix::Matrix()
     this->lines = new std::vector<matrix::MatrixLine *>();
 }
 
+bool matrix::Matrix::equality_between_matrices(matrix::Matrix *matrix)
+{
+    if (!(this->get_lines_quantity() == matrix->get_lines_quantity() &&
+          this->get_columns_quantity() == matrix->get_columns_quantity()))
+    {
+        return false;
+    }
+
+    bool areEquals = true;
+
+    for (int line = 0; line < this->get_lines_quantity(); line++)
+    {
+        for (int column = 0; column < this->get_columns_quantity(); column++)
+        {
+            const bool equalsValuesInPosition =
+                (this->get_item(line, column)->get_data()) ==
+                (matrix->get_item(line, column)->get_data());
+
+            if (!equalsValuesInPosition)
+            {
+                areEquals = false;
+                break;
+            }
+        }
+
+        if (!areEquals)
+        {
+            break;
+        }
+    }
+
+    return areEquals;
+}
+
+void matrix::Matrix::sum_of_two_matrix(matrix::Matrix *matrixToSum)
+{   
+    if (!(this->get_lines_quantity() == matrixToSum->get_lines_quantity() &&
+          this->get_columns_quantity() == matrixToSum->get_columns_quantity()))
+    {
+        return;
+    }
+
+    for (int line = 0; line < this->get_lines_quantity(); line++)
+    {
+        for (int column = 0; column < this->get_columns_quantity(); column++)
+        {
+            const int currentPositionData = (this->get_item(line, column)->get_data());
+            const int currentPositionDataMatrixToSum = (matrixToSum->get_item(line, column)->get_data());
+
+            matrix::MatrixItem *currentPosition = (this->get_item(line, column));
+
+            currentPosition->set_data(currentPositionData + currentPositionDataMatrixToSum);
+        }
+    }
+}
+
 matrix::Matrix::Matrix(int linesQuantity, int columnsQuantity)
 {
     this->linesQuantity = linesQuantity;
@@ -124,7 +180,8 @@ void matrix::Matrix::print_matrix(bool exitOption)
     if (exitOption)
     {
         int exit = 1;
-        std::cout << std::endl << matrix::Matrix::tab << "Input 0 to stop printing\n";
+        std::cout << std::endl
+                  << matrix::Matrix::tab << "Input 0 to stop printing\n";
         while (exit != 0)
         {
             std::cout << matrix::Matrix::tab;

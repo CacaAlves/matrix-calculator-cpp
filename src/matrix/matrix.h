@@ -14,6 +14,8 @@ namespace matrix
     public:
         const std::string tab = "\t\t\t\t\t\t";
         Matrix();
+        bool equality_between_matrices(Matrix *matrix);
+        void sum_of_two_matrix(Matrix *matrix);
         Matrix(int linesQuantity, int columnsQuantity);
         ~Matrix();
         void add_line(matrix::MatrixLine *line);
@@ -28,6 +30,7 @@ namespace matrix
         void add_item_matrix(const int data);
         void print_matrix(bool exitOption = false);
         bool is_in_last_position();
+
     private:
         std::vector<matrix::MatrixLine *> *lines;
         int linesQuantity;

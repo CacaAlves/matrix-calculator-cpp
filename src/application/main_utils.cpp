@@ -10,7 +10,7 @@ main_utils::MainUtils::MainUtils() {}
 
 void main_utils::MainUtils::welcome_message()
 {
-    std::cout << main_utils::MainUtils::tab << " ---------------- Welcome to the Matrix Calculator! ---------------- \n";
+    std::cout << this->tab << " ---------------- Welcome to the Matrix Calculator! ---------------- \n";
 }
 
 bool main_utils::MainUtils::is_menu_a_valid_number()
@@ -24,9 +24,8 @@ bool main_utils::MainUtils::is_menu_a_valid_number()
     case 2:
     case 3:
     case 4:
-    case 8:
-    case 9:
-    case 10:
+    case 5:
+    case 6:
         isAValidNumber = true;
         break;
     default:
@@ -40,17 +39,18 @@ bool main_utils::MainUtils::is_menu_a_valid_number()
 void main_utils::MainUtils::print_receive_menu()
 {
     std::cout
-        << main_utils::MainUtils::tab << "Menu\n\n";
-    std::cout << main_utils::MainUtils::tab << "Enter a number.\n";
-    std::cout << main_utils::MainUtils::tab << "1 - enter a matrix.\n";
-    std::cout << main_utils::MainUtils::tab << "2 - print matrix.\n";
-    std::cout << main_utils::MainUtils::tab << "8 - delete matrix.\n";
-    std::cout << main_utils::MainUtils::tab << "9 - manage storage.\n";
-    std::cout << main_utils::MainUtils::tab << "11 - hints.\n";
-    std::cout << main_utils::MainUtils::tab << "0 - exit program.\n";
+        << this->tab << "Menu\n\n";
+    std::cout << this->tab << "Enter a number:\n";
+    std::cout << this->tab << "1 - enter a matrix.\n";
+    std::cout << this->tab << "2 - print a matrix.\n";
+    std::cout << this->tab << "3 - operations between matrices.\n";
+    std::cout << this->tab << "4 - delete a matrix (from variables).\n";
+    std::cout << this->tab << "5 - store / read / delete from Hard Disk.\n";
+    std::cout << this->tab << "6 - hints.\n";
+    std::cout << this->tab << "0 - exit program.\n";
 
     std::cout << std::endl
-              << main_utils::MainUtils::tab;
+              << this->tab;
     std::cin >> this->menu;
 
     std::cout << std::endl;
@@ -68,51 +68,61 @@ void main_utils::MainUtils::delete_matrix(std::string name)
 
 main_utils::ActionResponse *main_utils::MainUtils::perform_action_menu()
 {
-    main_utils::ActionResponse *response = new main_utils::ActionResponse;
+    main_utils::ActionResponse *response;
 
     switch (this->menu)
     {
     case 0:
     {
+        response = new main_utils::ActionResponse;
         response->set_action_response("", false); /* Returning if the program needs to continue running */
         break;
     }
     case 1:
     {
+        response = new main_utils::ActionResponse;
         std::string newMatrixName = this->receive_matrix();
-        std::string responseMessage = "\n" + main_utils::MainUtils::tab + "The new matrix was stored in the constant: " + newMatrixName + "\n";
+        std::string responseMessage = "\n" + this->tab + "The new matrix was stored in the constant: " + newMatrixName + "\n";
         response->set_action_response(responseMessage, true);
 
         break;
     }
     case 2:
     {
+        response = new main_utils::ActionResponse;
         std::string responseMessage = this->print_matrix();
         response->set_action_response(responseMessage, true);
 
         break;
     }
-    case 8:
+    case 3:
     {
-        this->delete_matrix_from_matrices();
-        std::string responseMessage = "";
+        response = (this->manage_operations());
+        break;
+    }
+    case 4:
+    {
+        response = new main_utils::ActionResponse;
+        std::string responseMessage = this->delete_matrix_from_matrices();
         response->set_action_response(responseMessage, true);
         break;
     }
-    case 9:
+    case 5:
     {
         response = this->manage_hard_disk();
         break;
     }
-    case 11:
+    case 6:
     {
+        response = new main_utils::ActionResponse;
         this->print_hints();
         std::string responseMessage = "";
         response->set_action_response(responseMessage, true);
         break;
     }
     default:
-        std::string responseMessage = main_utils::MainUtils::tab + "Input a valid input\n";
+        response = new main_utils::ActionResponse;
+        std::string responseMessage = this->tab + "Input a valid input\n";
         response->set_action_response(responseMessage, true);
         break;
     }
@@ -123,15 +133,15 @@ main_utils::ActionResponse *main_utils::MainUtils::perform_action_menu()
 void main_utils::MainUtils::print_receive_menu_hard_disk()
 {
     std::cout << std::endl
-              << main_utils::MainUtils::tab << "Menu storage\n\n";
-    std::cout << main_utils::MainUtils::tab << "Enter a number.\n";
-    std::cout << main_utils::MainUtils::tab << "1 - store a matrix in the storage.\n";
-    std::cout << main_utils::MainUtils::tab << "2 - read a matrix from the storage.\n";
-    std::cout << main_utils::MainUtils::tab << "3 - delete matrix from the storage.\n";
-    std::cout << main_utils::MainUtils::tab << "0 - cancel.\n";
+              << this->tab << "Menu storage\n\n";
+    std::cout << this->tab << "Enter a number:\n";
+    std::cout << this->tab << "1 - store a matrix in the storage.\n";
+    std::cout << this->tab << "2 - read a matrix from the storage.\n";
+    std::cout << this->tab << "3 - delete matrix from the storage.\n";
+    std::cout << this->tab << "0 - cancel.\n";
 
     std::cout << std::endl
-              << main_utils::MainUtils::tab;
+              << this->tab;
     std::cin >> this->menuHardDisk;
 
     std::cout << std::endl;
@@ -192,6 +202,96 @@ main_utils::ActionResponse *main_utils::MainUtils::perform_action_menu_hard_disk
     case 2:
     {
         std::string responseMessage = this->read_matrix_hard_disk();
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 3:
+    {
+        std::string responseMessage = this->delete_matrix_hard_disk();
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    default:
+        break;
+    }
+
+    return response;
+}
+
+void main_utils::MainUtils::print_receive_menu_operations()
+{
+    std::cout << std::endl
+              << this->tab << "Menu operations\n\n";
+    std::cout << this->tab << "Enter a number:\n";
+    std::cout << this->tab << "1 - equality between matrices.\n";
+    std::cout << this->tab << "2 - sum two matrices.\n";
+    std::cout << this->tab << "3 - subtraction between two matrices.\n";
+    std::cout << this->tab << "4 - multiply a matrice by a constant.\n";
+    std::cout << this->tab << "0 - cancel.\n";
+
+    std::cout << std::endl
+              << this->tab;
+    std::cin >> this->menuOperations;
+
+    std::cout << std::endl;
+}
+
+bool main_utils::MainUtils::is_menu_operations_a_valid_number()
+{
+    bool isAValidNumber;
+
+    switch (this->menuOperations)
+    {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 0:
+        isAValidNumber = true;
+        break;
+    default:
+        isAValidNumber = false;
+        break;
+    }
+
+    return isAValidNumber;
+}
+
+main_utils::ActionResponse *main_utils::MainUtils::manage_operations()
+{
+    do
+    {
+        this->print_receive_menu_operations();
+
+    } while (!(this->is_menu_operations_a_valid_number()));
+
+    system("clear");
+
+    ActionResponse *response = perform_action_menu_operations();
+    return response;
+}
+
+main_utils::ActionResponse *main_utils::MainUtils::perform_action_menu_operations()
+{
+    main_utils::ActionResponse *response = new main_utils::ActionResponse;
+
+    switch (this->menuOperations)
+    {
+    case 0:
+    {
+        std::string responseMessage = "";
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 1:
+    {
+        std::string responseMessage = this->equality_between_matrices();
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 2:
+    {
+        std::string responseMessage = this->sum_of_matrices();
         response->set_action_response(responseMessage, true);
         break;
     }
@@ -269,27 +369,35 @@ matrix::Matrix *main_utils::MainUtils::find_matrix_in_matrices(std::string name)
     }
 }
 
-std::string main_utils::MainUtils::receive_matrix()
+matrix::Matrix *main_utils::MainUtils::get_matrix_zero(int lines, int columns)
 {
-    std::cout << main_utils::MainUtils::tab << "Input the number of lines and then the number columns of the new matrix.\n";
+    matrix::Matrix *matrixZero = new matrix::Matrix(lines, columns);
 
-    int lines, columns;
-    std::cout << main_utils::MainUtils::tab;
-    std::cin >> lines;
-    std::cout << main_utils::MainUtils::tab;
-    std::cin >> columns;
-
-    matrix::Matrix *newMatrix = new matrix::Matrix(lines, columns);
-    for (int i = 0; i < newMatrix->get_lines_quantity(); i++)
+    for (int i = 0; i < matrixZero->get_lines_quantity(); i++)
     {
         matrix::MatrixLine *tempLine = new matrix::MatrixLine();
-        newMatrix->add_line(tempLine);
+        matrixZero->add_line(tempLine);
 
-        for (int j = 0; j < newMatrix->get_columns_quantity(); j++)
+        for (int j = 0; j < matrixZero->get_columns_quantity(); j++)
         {
             tempLine->add_element(0);
         }
     }
+
+    return matrixZero;
+}
+
+std::string main_utils::MainUtils::receive_matrix()
+{
+    std::cout << this->tab << "Input the number of lines and then the number columns of the new matrix.\n";
+
+    int lines, columns;
+    std::cout << this->tab;
+    std::cin >> lines;
+    std::cout << this->tab;
+    std::cin >> columns;
+
+    matrix::Matrix *newMatrix = this->get_matrix_zero(lines, columns);
 
     bool insertionOccurring = true;
     while (insertionOccurring)
@@ -299,7 +407,7 @@ std::string main_utils::MainUtils::receive_matrix()
 
         std::string input;
 
-        std::cout << main_utils::MainUtils::tab;
+        std::cout << this->tab;
         std::cin >> input;
 
         const std::string backspace = "bs";
@@ -349,8 +457,8 @@ std::string main_utils::MainUtils::print_matrix()
     std::string responseMessage;
 
     std::string matrixName;
-    std::cout << main_utils::MainUtils::tab << "Insert a matrix name of the matrix to be printed.\n";
-    std::cout << main_utils::MainUtils::tab;
+    std::cout << this->tab << "Insert a matrix name of the matrix to be printed.\n";
+    std::cout << this->tab;
     std::cin >> matrixName;
 
     matrix::Matrix *matrix = this->find_matrix_in_matrices(matrixName);
@@ -361,7 +469,7 @@ std::string main_utils::MainUtils::print_matrix()
     }
     else
     {
-        responseMessage = "\n" + main_utils::MainUtils::tab + "There is not a matrix with this name\n";
+        responseMessage = "\n" + this->tab + "There is not a matrix with this name\n";
     }
 
     return responseMessage;
@@ -374,10 +482,10 @@ void main_utils::MainUtils::print_hints()
 
     int exit = 1;
     std::cout << std::endl
-              << main_utils::MainUtils::tab << "Input 0 to stop printing\n";
+              << this->tab << "Input 0 to stop printing\n";
     while (exit != 0)
     {
-        std::cout << main_utils::MainUtils::tab;
+        std::cout << this->tab;
         std::cin >> exit;
     }
 }
@@ -389,7 +497,7 @@ std::string main_utils::MainUtils::store_matrix_hard_disk()
 
     std::string matrixName;
 
-    std::cout << main_utils::MainUtils::tab << "Input a constant name to store: ";
+    std::cout << this->tab << "Input a matrix name to store: ";
 
     std::cin >> matrixName;
 
@@ -405,7 +513,7 @@ std::string main_utils::MainUtils::store_matrix_hard_disk()
     else
     {
         std::string fileName;
-        std::cout << main_utils::MainUtils::tab << "Input the name of the matrix in the storage: ";
+        std::cout << this->tab << "Input the name of the matrix in the storage: ";
         std::cin >> fileName;
 
         matrix::MatrixStorage *matrixInStorageFormat = new matrix::MatrixStorage();
@@ -420,11 +528,11 @@ std::string main_utils::MainUtils::store_matrix_hard_disk()
 
     if (ableToStore)
     {
-        strToReturn = main_utils::MainUtils::tab + "Stored succefully.";
+        strToReturn = this->tab + "Stored succefully.";
     }
     else
     {
-        strToReturn = main_utils::MainUtils::tab + "Error storing.";
+        strToReturn = this->tab + "Error storing: there is no matrix with that name on list of matrices.\n";
     }
 
     return strToReturn;
@@ -437,27 +545,22 @@ std::string main_utils::MainUtils::read_matrix_hard_disk()
 
     std::string matrixName;
 
-    std::cout << main_utils::MainUtils::tab << "Input a matrix name to read: ";
+    std::cout << this->tab << "Input a matrix name to read: ";
 
     std::cin >> matrixName;
 
-    matrix::MatrixStorage *matrixInStorageFormat = new matrix::MatrixStorage();
-    matrixInStorageFormat->set_file_name(matrixName);
-
-    matrix::Matrix *readMatrix = matrixInStorageFormat->read_from_hard_disk();
-
-    delete matrixInStorageFormat;
+    matrix::Matrix *readMatrix = matrix::MatrixStorage::read_from_hard_disk(matrixName);
 
     ableToRead = !(readMatrix == NULL);
 
     if (ableToRead)
     {
         std::string readMatrixNamethis = this->insert_matrix(readMatrix);
-        strToReturn = main_utils::MainUtils::tab + "The new matrix was stored in the constant: " + readMatrixNamethis + "\n";
+        strToReturn = this->tab + "The new matrix was stored in the constant: " + readMatrixNamethis + "\n";
     }
     else
     {
-        strToReturn = main_utils::MainUtils::tab + "Error reading.\n";
+        strToReturn = this->tab + "Error reading: there is no matrix with that name on Hard Disk.\n";
     }
 
     return strToReturn;
@@ -469,16 +572,151 @@ std::string main_utils::MainUtils::delete_matrix_hard_disk()
 
     std::string matrixName;
 
-    std::cout << main_utils::MainUtils::tab << "Input a matrix name to delete: ";
+    std::cout << this->tab << "Input a matrix name to delete from Hard Disk: ";
 
     std::cin >> matrixName;
 
     matrix::MatrixStorage::delete_from_hard_disk(matrixName);
 
-    strToReturn = main_utils::MainUtils::tab + "Deleted, if any.\n";
+    strToReturn = this->tab + "Deleted, if any.\n";
     return strToReturn;
 }
 
 std::string main_utils::MainUtils::delete_matrix_from_matrices()
 {
+    std::string strToReturn;
+
+    std::string matrixName;
+
+    std::cout << this->tab << "Input a matrix name to delete from list of variables: ";
+
+    std::cin >> matrixName;
+
+    this->delete_matrix(matrixName);
+
+    strToReturn = this->tab + "Deleted, if any.\n";
+    return strToReturn;
+}
+
+std::string main_utils::MainUtils::equality_between_matrices()
+{
+    std::string strToReturn;
+    bool equality;
+
+    std::string matrix1Name;
+    std::string matrix2Name;
+
+    std::cout << this->tab << "Input a matrix name: ";
+    std::cin >> matrix1Name;
+
+    std::cout << this->tab << "Input a second matrix name to be compared: ";
+    std::cin >> matrix2Name;
+
+    matrix::Matrix *matrix1 = this->find_matrix_in_matrices(matrix1Name);
+    matrix::Matrix *matrix2 = this->find_matrix_in_matrices(matrix2Name);
+
+    if (matrix1 == NULL || matrix2 == NULL)
+    {
+        equality = false;
+        strToReturn = this->tab + "One or both of the matrices are not in the list of variables\n";
+    }
+    else
+    {
+        equality = matrix1->equality_between_matrices(matrix2);
+    }
+
+    if (equality)
+    {
+        strToReturn = this->tab + "The matrix " + matrix1Name + " and the matrix " +
+                      matrix2Name + " are equals\n";
+    }
+    else if (strToReturn.size() == 0)
+    {
+        strToReturn = this->tab + "The matrix " + matrix1Name + " and the matrix " +
+                      matrix2Name + " are NOT equals\n";
+    }
+
+    return strToReturn;
+}
+
+std::string main_utils::MainUtils::sum_of_matrices()
+{
+    std::string strToReturn;
+    bool ableToSum = true;
+
+    std::string matrixName;
+    std::vector<matrix::Matrix *> matricesToSum;
+    int linesQuantity;
+    int columnsQuantity;
+
+    while (matrixName != "0" && ableToSum)
+    {
+        std::cout << this->tab << "Input a matrix name to sum (input 0 to stop): ";
+        std::cin >> matrixName;
+
+        if (matrixName != "0")
+        {
+
+            matrix::Matrix *matrix = find_matrix_in_matrices(matrixName);
+
+            if (matrix == NULL)
+            {
+                strToReturn = this->tab + "One of the matrices in the input does not exist\n";
+                ableToSum = false;
+            }
+            else
+            {
+                matricesToSum.push_back(matrix);
+                ableToSum = true;
+            }
+        }
+    }
+
+    if (ableToSum)
+    {
+        bool allSameSize = true;
+
+        linesQuantity = -1;
+        columnsQuantity = -1;
+
+        for (matrix::Matrix *temp : matricesToSum)
+        {
+            if (linesQuantity == -1 && columnsQuantity == -1) //first loop
+            {
+                linesQuantity = temp->get_lines_quantity();
+                columnsQuantity = temp->get_columns_quantity();
+            }
+            else
+            {
+                ableToSum = (linesQuantity == temp->get_lines_quantity() && columnsQuantity == temp->get_columns_quantity());
+            }
+
+            if (!ableToSum)
+            {
+                break;
+            }
+        }
+    }
+
+    if (ableToSum)
+    {
+        matrix::Matrix *sumMatrix = get_matrix_zero(linesQuantity, columnsQuantity);
+
+        for (matrix::Matrix *temp : matricesToSum)
+        {
+            sumMatrix->sum_of_two_matrix(temp);
+        }
+
+        std::string sumMatrixName = this->insert_matrix(sumMatrix);
+        strToReturn = this->tab + "The new matrix was stored in the constant: " + sumMatrixName + "\n";
+
+        sumMatrix->set_current_targed_line(sumMatrix->get_lines_quantity()); //setting the target to after the last element
+    }
+    else if (!ableToSum && strToReturn.size() == 0)
+    {
+        strToReturn = this->tab + "Something went wrong: Unable to sum\n";
+    }
+
+    matricesToSum.clear();
+    return strToReturn;
 }
