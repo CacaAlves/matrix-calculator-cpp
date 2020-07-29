@@ -37,7 +37,7 @@ bool main_utils::MainUtils::is_a_digit(char c)
     return isDigit;
 }
 
-int main_utils::MainUtils::filtered_input()
+int main_utils::MainUtils::filtered_input(int returnWhenNaN)
 {
     std::string input;
     std::string filteredInput = "";
@@ -75,7 +75,7 @@ int main_utils::MainUtils::filtered_input()
         }
     }
 
-    inputToReturn = (isANumber ? (this->str_to_number(filteredInput)) : -1);
+    inputToReturn = (isANumber ? (this->str_to_number(filteredInput)) : returnWhenNaN);
 
     return inputToReturn;
 }
@@ -169,135 +169,7 @@ matrix::Matrix *main_utils::MainUtils::get_matrix_zero(int lines, int columns)
     return matrixZero;
 }
 
-std::string main_utils::MainUtils::receive_matrix()
-{
 
-    int lines = 0, columns = 0;
-
-    std::cout << this->tab << "Input the number of lines and then the number columns of the new matrix.\n";
-
-    do
-    {
-        if (lines < 0 || columns < 0)
-        {
-            std::cout << this->tab << "Input a positive number.\n";
-        }
-
-        std::cout << this->tab;
-        lines = this->filtered_input();
-
-        std::cout << this->tab;
-        columns = this->filtered_input();
-
-        system("clear");
-
-    } while (lines < 0 || columns < 0);
-
-    matrix::Matrix *newMatrix = this->get_matrix_zero(lines, columns);
-
-    bool insertionOccurring = true;
-    while (insertionOccurring)
-    {
-        system("clear");
-        newMatrix->print_matrix();
-
-        std::string input;
-
-        std::cout << this->tab;
-        std::cin >> input;
-
-        const std::string backspace = "bs";
-        if (input == backspace)
-        {
-            newMatrix->set_current_targed_column(newMatrix->get_current_targed_column() - 1);
-            if (newMatrix->get_current_targed_line() != 0 && newMatrix->get_current_targed_column() < 0)
-            {
-                newMatrix->set_current_targed_line(newMatrix->get_current_targed_line() - 1);
-                newMatrix->set_current_targed_column(newMatrix->get_columns_quantity() - 1);
-            }
-
-            if (newMatrix->get_current_targed_column() < 0)
-            {
-                newMatrix->set_current_targed_column(0);
-            }
-        }
-        else
-        {
-            int integerInput = this->str_to_number(input);
-            newMatrix->add_item_matrix(integerInput);
-
-            if (newMatrix->is_in_last_position())
-            {
-                insertionOccurring = false;
-                newMatrix->set_current_targed_line(newMatrix->get_current_targed_line() + 1);
-            }
-            else
-            {
-                newMatrix->set_current_targed_column(newMatrix->get_current_targed_column() + 1);
-                if (newMatrix->get_current_targed_column() > (newMatrix->get_columns_quantity() - 1))
-                {
-                    newMatrix->set_current_targed_column(0);
-                    newMatrix->set_current_targed_line(newMatrix->get_current_targed_line() + 1);
-                }
-            }
-        }
-    }
-
-    std::string newMatrixName = this->insert_matrix(newMatrix);
-
-    return newMatrixName;
-}
-
-std::string main_utils::MainUtils::print_matrix()
-{
-    std::string responseMessage;
-
-    std::string matrixName;
-    std::cout << this->tab << "Insert a matrix name of the matrix to be printed.\n";
-    std::cout << this->tab;
-    std::cin >> matrixName;
-
-    matrix::Matrix *matrix = this->find_matrix_in_matrices(matrixName);
-    if (matrix != NULL)
-    {
-        matrix->print_matrix(true);
-        responseMessage = "";
-    }
-    else
-    {
-        responseMessage = "\n" + this->tab + "There is not a matrix with this name\n";
-    }
-
-    return responseMessage;
-}
-
-std::string main_utils::MainUtils::print_all_matrices()
-{
-    std::string responseMessage;
-
-    if (this->matrices->empty())
-    {
-        responseMessage = this->tab + "There is no matrices to print\n";
-    }
-    else
-    {
-        responseMessage = "";
-        for (auto it = (this->matrices)->begin(); it != (this->matrices)->end(); it++)
-        {
-            std::cout << this->tab << "Matrix " << it->first << ": \n";
-
-            matrix::Matrix *matrix = it->second;
-            bool isLastOne = ((++it) == (this->matrices)->end());
-            it--;
-
-            matrix->print_matrix(isLastOne);
-
-            std::cout << std::endl;
-        }
-    }
-
-    return responseMessage;
-}
 
 std::string main_utils::MainUtils::delete_matrix_from_matrices()
 {

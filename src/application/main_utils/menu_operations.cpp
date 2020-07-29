@@ -312,10 +312,58 @@ std::string main_utils::MenuOperations::difference_between_matrices()
 
 std::string main_utils::MenuOperations::multiply_matrix_by_constant()
 {
-    
+    std::string strToReturn;
+
+    std::string matrixName;
+    int constant;
+
+    std::cout << (this->utils)->tab << "Input a matrix name to sum: ";
+    std::cin >> matrixName;
+
+    std::cout << (this->utils)->tab << "Input a constant to multiply: ";
+    constant = (this->utils)->filtered_input(1); //1 will be returned when input is NaN
+
+    if (constant == 1)
+    {
+        strToReturn = (this->utils)->tab + "Did not multiplied.\n";
+        return strToReturn;
+    }
+
+    matrix::Matrix *matrix = (this->utils)->find_matrix_in_matrices(matrixName);
+    matrix::Matrix *mutipliedMatrix = NULL;
+
+    if (matrix == NULL)
+    {
+        strToReturn = (this->utils)->tab + "The matrix of the input does not exist\n";
+    }
+    else
+    {
+        int linesQuantity = matrix->get_lines_quantity();
+        int columnsQuantity = matrix->get_columns_quantity();
+
+        mutipliedMatrix = (this->utils)->get_matrix_zero(linesQuantity, columnsQuantity);
+        mutipliedMatrix->set_to_equal_to(matrix);
+
+        for (int line = 0; line < mutipliedMatrix->get_lines_quantity(); line++)
+        {
+            for (int column = 0; column < mutipliedMatrix->get_columns_quantity(); column++)
+            {
+                matrix::MatrixItem *item = mutipliedMatrix->get_item(line, column);
+                int currentData = item->get_data();
+                item->set_data(currentData * constant);
+            }
+        }
+
+        std::string multipliedMatrixName = (this->utils)->insert_matrix(mutipliedMatrix);
+        strToReturn = (this->utils)->tab + "The multiplied matrix was stored in the constant: " + multipliedMatrixName + "\n";
+
+        mutipliedMatrix->set_current_targed_line(mutipliedMatrix->get_lines_quantity()); //setting the target to after the last element
+    }
+
+    return strToReturn;
 }
 
 void main_utils::MenuOperations::set_main_utils(main_utils::MainUtils *utils)
 {
-    this->utils = utils;   
+    this->utils = utils;
 }

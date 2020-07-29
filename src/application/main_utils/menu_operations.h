@@ -2,6 +2,7 @@
 #define MENU_OPERATIONS
 
 #include <iostream>
+#include <vector>
 #include "main_utils.h"
 
 namespace main_utils

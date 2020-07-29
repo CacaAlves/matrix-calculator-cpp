@@ -23,6 +23,9 @@ namespace main_utils
         main_utils::MenuHardDisk *menuHardDisk;
         main_utils::MenuOperations *MenuOperations;
         main_utils::MainUtils *utils;
+        std::string receive_matrix();
+        std::string print_matrix();
+        std::string print_all_matrices();
         void print_hints();
     };
 } // namespace main_utils

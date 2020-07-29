@@ -84,7 +84,7 @@ main_utils::ActionResponse *main_utils::MenuMain::perform_action_menu()
     case 1:
     {
         response = new main_utils::ActionResponse;
-        std::string newMatrixName = (this->utils)->receive_matrix();
+        std::string newMatrixName = this->receive_matrix();
         std::string responseMessage = "\n" + (this->utils)->tab + "The new matrix was stored in the constant: " + newMatrixName + "\n";
         response->set_action_response(responseMessage, true);
 
@@ -93,7 +93,7 @@ main_utils::ActionResponse *main_utils::MenuMain::perform_action_menu()
     case 2:
     {
         response = new main_utils::ActionResponse;
-        std::string responseMessage = (this->utils)->print_matrix();
+        std::string responseMessage = this->print_matrix();
         response->set_action_response(responseMessage, true);
 
         break;
@@ -101,7 +101,7 @@ main_utils::ActionResponse *main_utils::MenuMain::perform_action_menu()
     case 3:
     {
         response = new main_utils::ActionResponse;
-        std::string responseMessage = (this->utils)->print_all_matrices();
+        std::string responseMessage = this->print_all_matrices();
         response->set_action_response(responseMessage, true);
         break;
     }
@@ -153,4 +153,134 @@ void main_utils::MenuMain::print_hints()
         std::cout << (this->utils)->tab;
         exit = (this->utils)->filtered_input();
     }
+}
+
+std::string main_utils::MenuMain::receive_matrix()
+{
+
+    int lines = 0, columns = 0;
+
+    std::cout << (this->utils)->tab << "Input the number of lines and then the number columns of the new matrix.\n";
+
+    do
+    {
+        if (lines < 0 || columns < 0)
+        {
+            std::cout << (this->utils)->tab << "Input a positive number.\n";
+        }
+
+        std::cout << (this->utils)->tab;
+        lines = (this->utils)->filtered_input();
+
+        std::cout << (this->utils)->tab;
+        columns = (this->utils)->filtered_input();
+
+        system("clear");
+
+    } while (lines < 0 || columns < 0);
+
+    matrix::Matrix *newMatrix = (this->utils)->get_matrix_zero(lines, columns);
+
+    bool insertionOccurring = true;
+    while (insertionOccurring)
+    {
+        system("clear");
+        newMatrix->print_matrix();
+
+        std::string input;
+
+        std::cout << (this->utils)->tab;
+        std::cin >> input;
+
+        const std::string backspace = "bs";
+        if (input == backspace)
+        {
+            newMatrix->set_current_targed_column(newMatrix->get_current_targed_column() - 1);
+            if (newMatrix->get_current_targed_line() != 0 && newMatrix->get_current_targed_column() < 0)
+            {
+                newMatrix->set_current_targed_line(newMatrix->get_current_targed_line() - 1);
+                newMatrix->set_current_targed_column(newMatrix->get_columns_quantity() - 1);
+            }
+
+            if (newMatrix->get_current_targed_column() < 0)
+            {
+                newMatrix->set_current_targed_column(0);
+            }
+        }
+        else
+        {
+            int integerInput = (this->utils)->str_to_number(input);
+            newMatrix->add_item_matrix(integerInput);
+
+            if (newMatrix->is_in_last_position())
+            {
+                insertionOccurring = false;
+                newMatrix->set_current_targed_line(newMatrix->get_current_targed_line() + 1);
+            }
+            else
+            {
+                newMatrix->set_current_targed_column(newMatrix->get_current_targed_column() + 1);
+                if (newMatrix->get_current_targed_column() > (newMatrix->get_columns_quantity() - 1))
+                {
+                    newMatrix->set_current_targed_column(0);
+                    newMatrix->set_current_targed_line(newMatrix->get_current_targed_line() + 1);
+                }
+            }
+        }
+    }
+
+    std::string newMatrixName = (this->utils)->insert_matrix(newMatrix);
+
+    return newMatrixName;
+}
+
+std::string main_utils::MenuMain::print_matrix()
+{
+    std::string responseMessage;
+
+    std::string matrixName;
+    std::cout << (this->utils)->tab << "Insert a matrix name of the matrix to be printed.\n";
+    std::cout << (this->utils)->tab;
+    std::cin >> matrixName;
+
+    matrix::Matrix *matrix = (this->utils)->find_matrix_in_matrices(matrixName);
+    if (matrix != NULL)
+    {
+        matrix->print_matrix(true);
+        responseMessage = "";
+    }
+    else
+    {
+        responseMessage = "\n" + (this->utils)->tab + "There is not a matrix with this name\n";
+    }
+
+    return responseMessage;
+}
+
+std::string main_utils::MenuMain::print_all_matrices()
+{
+    std::string responseMessage;
+
+    if (((this->utils)->matrices)->empty())
+    {
+        responseMessage = (this->utils)->tab + "There is no matrices to print\n";
+    }
+    else
+    {
+        responseMessage = "";
+        for (auto it = ((this->utils)->matrices)->begin(); it != ((this->utils)->matrices)->end(); it++)
+        {
+            std::cout << (this->utils)->tab << "Matrix " << it->first << ": \n";
+
+            matrix::Matrix *matrix = it->second;
+            bool isLastOne = ((++it) == ((this->utils)->matrices)->end());
+            it--;
+
+            matrix->print_matrix(isLastOne);
+
+            std::cout << std::endl;
+        }
+    }
+
+    return responseMessage;
 }

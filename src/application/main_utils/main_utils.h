@@ -24,21 +24,17 @@ namespace main_utils
     public:
         std::string tab = "\t\t\t\t\t\t";
         MainUtils();
-        int filtered_input();
+        int filtered_input(int returnWhenNaN = -1);
         std::string insert_matrix(matrix::Matrix *matrix);
         matrix::Matrix *find_matrix_in_matrices(std::string name);
-        std::string receive_matrix();
-        std::string print_matrix();
-        std::string print_all_matrices();
         std::string delete_matrix_from_matrices();
         matrix::Matrix *get_matrix_zero(int lines, int columns);
+        std::map<std::string, matrix::Matrix *> *matrices;
+        long long int str_to_number(const std::string str);
 
     private:
-        std::map<std::string, matrix::Matrix *> *matrices;
         void clear_matrices();
         void delete_matrix(std::string name);
-        int menuOperations;
-        long long int str_to_number(const std::string str);
         bool is_a_digit(char c);
     };
 } // namespace main_utils
