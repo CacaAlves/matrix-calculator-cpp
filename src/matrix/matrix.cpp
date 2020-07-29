@@ -175,31 +175,29 @@ void matrix::Matrix::print_matrix(bool skipOption)
                 {
                     std::cout << matrix::Matrix::tab;
                 }
-                std::cout << " * ";
+                std::cout << "       *";
             }
-            else if ((i > this->currentTargedLine) || (i == this->currentTargedLine && j > this->currentTargedColumn))
+            else if ((i < this->currentTargedLine) || (i == this->currentTargedLine && j <= this->currentTargedColumn))
+            /* elements that were not target yet will not be printed */
             {
+
                 if (j == 0)
                 {
                     std::cout << matrix::Matrix::tab;
                 }
-                std::cout << "   ";
-            }
-            else
-            {
-                if (j == 0)
-                {
-                    std::cout << matrix::Matrix::tab;
-                }
+
                 int data = (this->get_item(i, j)->get_data());
-                if (data < 0)
+                const std::string space = " ";
+                std::string spaces = "";
+
+                int decrement = 8;
+
+                for (int k = 0; k < decrement - (std::to_string(data)).size(); k++)
                 {
-                    std::cout << "  " << std::to_string(data) << "   ";
+                    spaces += space;
                 }
-                else
-                {
-                    std::cout << "   " << std::to_string(data) << "   ";
-                }
+
+                std::cout << spaces << std::to_string(data);
             }
         }
 
