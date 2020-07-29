@@ -26,6 +26,7 @@ bool main_utils::MainUtils::is_menu_a_valid_number()
     case 4:
     case 5:
     case 6:
+    case 7:
         isAValidNumber = true;
         break;
     default:
@@ -43,10 +44,11 @@ void main_utils::MainUtils::print_receive_menu()
     std::cout << this->tab << "Enter a number:\n";
     std::cout << this->tab << "1 - enter a matrix.\n";
     std::cout << this->tab << "2 - print a matrix.\n";
-    std::cout << this->tab << "3 - operations between matrices.\n";
-    std::cout << this->tab << "4 - delete a matrix (from variables).\n";
-    std::cout << this->tab << "5 - store / read / delete from Hard Disk.\n";
-    std::cout << this->tab << "6 - hints.\n";
+    std::cout << this->tab << "3 - print all matrices.\n";
+    std::cout << this->tab << "4 - operations between matrices.\n";
+    std::cout << this->tab << "5 - delete a matrix (from variables).\n";
+    std::cout << this->tab << "6 - store / read / delete from Hard Disk.\n";
+    std::cout << this->tab << "7 - hints.\n";
     std::cout << this->tab << "0 - exit program.\n";
 
     std::cout << std::endl
@@ -97,22 +99,29 @@ main_utils::ActionResponse *main_utils::MainUtils::perform_action_menu()
     }
     case 3:
     {
-        response = (this->manage_operations());
+        response = new main_utils::ActionResponse;
+        std::string responseMessage = this->print_all_matrices();
+        response->set_action_response(responseMessage, true);
         break;
     }
     case 4:
+    {
+        response = (this->manage_operations());
+        break;
+    }
+    case 5:
     {
         response = new main_utils::ActionResponse;
         std::string responseMessage = this->delete_matrix_from_matrices();
         response->set_action_response(responseMessage, true);
         break;
     }
-    case 5:
+    case 6:
     {
         response = this->manage_hard_disk();
         break;
     }
-    case 6:
+    case 7:
     {
         response = new main_utils::ActionResponse;
         this->print_hints();
@@ -122,7 +131,7 @@ main_utils::ActionResponse *main_utils::MainUtils::perform_action_menu()
     }
     default:
         response = new main_utils::ActionResponse;
-        std::string responseMessage = this->tab + "Input a valid input\n";
+        std::string responseMessage = this->tab + "Enter a valid input\n";
         response->set_action_response(responseMessage, true);
         break;
     }
@@ -488,6 +497,34 @@ void main_utils::MainUtils::print_hints()
         std::cout << this->tab;
         std::cin >> exit;
     }
+}
+
+std::string main_utils::MainUtils::print_all_matrices()
+{
+    std::string responseMessage;
+
+    if (this->matrices.empty())
+    {
+        responseMessage = this->tab + "There is no matrices to print\n";
+    }
+    else
+    {
+        responseMessage = "";
+        for (auto it = (this->matrices).begin(); it != (this->matrices).end(); it++)
+        {
+            std::cout << this->tab << "Matrix " << it->first << ": \n";
+
+            matrix::Matrix *matrix = it->second;
+            bool isLastOne = ((++it) == (this->matrices).end());
+            it--;
+
+            matrix->print_matrix(isLastOne);
+
+            std::cout << std::endl;
+        }
+    }
+
+    return responseMessage;
 }
 
 std::string main_utils::MainUtils::store_matrix_hard_disk()

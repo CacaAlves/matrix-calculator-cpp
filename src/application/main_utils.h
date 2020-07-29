@@ -44,6 +44,7 @@ namespace main_utils
         matrix::Matrix *get_matrix_zero(int lines, int columns);
         std::string receive_matrix();
         std::string print_matrix();
+        std::string print_all_matrices();
         void print_hints();
         std::string store_matrix_hard_disk();
         std::string read_matrix_hard_disk();

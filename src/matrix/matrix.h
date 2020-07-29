@@ -28,7 +28,7 @@ namespace matrix
         bool is_square_matrix();
         matrix::MatrixItem *get_item(int line, int column);
         void add_item_matrix(const int data);
-        void print_matrix(bool exitOption = false);
+        void print_matrix(bool skipOption = false);
         bool is_in_last_position();
 
     private:

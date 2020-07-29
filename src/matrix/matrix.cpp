@@ -43,7 +43,7 @@ bool matrix::Matrix::equality_between_matrices(matrix::Matrix *matrix)
 }
 
 void matrix::Matrix::sum_of_two_matrix(matrix::Matrix *matrixToSum)
-{   
+{
     if (!(this->get_lines_quantity() == matrixToSum->get_lines_quantity() &&
           this->get_columns_quantity() == matrixToSum->get_columns_quantity()))
     {
@@ -139,7 +139,7 @@ void matrix::Matrix::add_item_matrix(const int data)
     line->set_element(data, this->currentTargedColumn);
 }
 
-void matrix::Matrix::print_matrix(bool exitOption)
+void matrix::Matrix::print_matrix(bool skipOption)
 {
     std::cout << std::endl;
 
@@ -169,15 +169,22 @@ void matrix::Matrix::print_matrix(bool exitOption)
                 {
                     std::cout << matrix::Matrix::tab;
                 }
-                matrix::MatrixItem *item = this->get_item(i, j);
-                std::cout << " " << std::to_string(item->get_data()) << " ";
+                int data = (this->get_item(i, j)->get_data());
+                if (data < 0)
+                {
+                    std::cout << "  " << std::to_string(data) << "   ";
+                }
+                else
+                {
+                    std::cout << "   " << std::to_string(data) << "   ";
+                }
             }
         }
 
         std::cout << std::endl;
     }
 
-    if (exitOption)
+    if (skipOption)
     {
         int exit = 1;
         std::cout << std::endl
