@@ -37,6 +37,38 @@ bool main_utils::MainUtils::is_menu_a_valid_number()
     return isAValidNumber;
 }
 
+int main_utils::MainUtils::filtered_menu_input()
+{
+    std::string input;
+    std::string filteredInput = "";
+    int menuToReturn;
+
+    std::cout << std::endl
+              << this->tab;
+
+    std::cin >> input;
+
+    switch (input.size())
+    {
+    case 1:
+        filteredInput += input.at(0);
+
+        menuToReturn = (this->str_to_number(filteredInput));
+        break;
+    case 2:
+        filteredInput += input.at(0);
+        filteredInput += input.at(1);
+
+        menuToReturn = (this->str_to_number(filteredInput));
+        break;
+    default:
+        menuToReturn = -1;
+        break;
+    }
+
+    return menuToReturn;
+}
+
 void main_utils::MainUtils::print_receive_menu()
 {
     std::cout
@@ -51,9 +83,7 @@ void main_utils::MainUtils::print_receive_menu()
     std::cout << this->tab << "7 - hints.\n";
     std::cout << this->tab << "0 - exit program.\n";
 
-    std::cout << std::endl
-              << this->tab;
-    std::cin >> this->menu;
+    this->menu = (this->filtered_menu_input());
 
     std::cout << std::endl;
 }
@@ -149,9 +179,7 @@ void main_utils::MainUtils::print_receive_menu_hard_disk()
     std::cout << this->tab << "3 - delete matrix from the storage.\n";
     std::cout << this->tab << "0 - cancel.\n";
 
-    std::cout << std::endl
-              << this->tab;
-    std::cin >> this->menuHardDisk;
+    this->menuHardDisk = (this->filtered_menu_input());
 
     std::cout << std::endl;
 }
@@ -181,10 +209,8 @@ main_utils::ActionResponse *main_utils::MainUtils::manage_hard_disk()
     do
     {
         this->print_receive_menu_hard_disk();
-
+        system("clear");
     } while (!(this->is_menu_hard_disk_a_valid_number()));
-
-    system("clear");
 
     ActionResponse *response = perform_action_menu_hard_disk();
     return response;
@@ -238,9 +264,7 @@ void main_utils::MainUtils::print_receive_menu_operations()
     std::cout << this->tab << "4 - multiply a matrice by a constant.\n";
     std::cout << this->tab << "0 - cancel.\n";
 
-    std::cout << std::endl
-              << this->tab;
-    std::cin >> this->menuOperations;
+    this->menuOperations = (this->filtered_menu_input());
 
     std::cout << std::endl;
 }
@@ -271,10 +295,8 @@ main_utils::ActionResponse *main_utils::MainUtils::manage_operations()
     do
     {
         this->print_receive_menu_operations();
-
+        system("clear");
     } while (!(this->is_menu_operations_a_valid_number()));
-
-    system("clear");
 
     ActionResponse *response = perform_action_menu_operations();
     return response;

@@ -21,9 +21,9 @@ int main(int argc, char const *argv[])
         do
         {
             utils.print_receive_menu();
+            system("clear");
         } while (!(utils.is_menu_a_valid_number()));
 
-        system("clear");
         response = utils.perform_action_menu();
         system("clear");
 

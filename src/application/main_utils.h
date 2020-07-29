@@ -33,6 +33,7 @@ namespace main_utils
 
     private:
         std::map<std::string, matrix::Matrix *> matrices;
+        int filtered_menu_input();
         void clear_matrices();
         void delete_matrix(std::string name);
         int menu;
