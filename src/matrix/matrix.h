@@ -31,6 +31,7 @@ namespace matrix
         void add_item_matrix(const int data);
         void print_matrix(bool skipOption = false);
         bool is_in_last_position();
+        void set_to_equal_to(Matrix *matchMatrix);
 
     private:
         std::vector<matrix::MatrixLine *> *lines;

@@ -302,7 +302,7 @@ void main_utils::MainUtils::print_receive_menu_operations()
     std::cout << this->tab << "1 - equality between matrices.\n";
     std::cout << this->tab << "2 - sum two matrices.\n";
     std::cout << this->tab << "3 - subtraction between two matrices.\n";
-    std::cout << this->tab << "4 - multiply a matrice by a constant.\n";
+    std::cout << this->tab << "4 - multiply a matrix by a constant.\n";
     std::cout << this->tab << "0 - cancel.\n";
 
     std::cout << std::endl
@@ -372,6 +372,12 @@ main_utils::ActionResponse *main_utils::MainUtils::perform_action_menu_operation
     case 3:
     {
         std::string responseMessage = this->difference_between_matrices();
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 4:
+    {
+        std::string responseMessage = this->multiply_matrix_by_constant();
         response->set_action_response(responseMessage, true);
         break;
     }
@@ -468,7 +474,7 @@ std::string main_utils::MainUtils::receive_matrix()
 
     std::cout << this->tab << "Input the number of lines and then the number columns of the new matrix.\n";
 
-    do 
+    do
     {
         if (lines < 0 || columns < 0)
         {
@@ -900,11 +906,20 @@ std::string main_utils::MainUtils::difference_between_matrices()
 
     if (ableToSubtract)
     {
-        matrix::Matrix *differenceMatrix = get_matrix_zero(linesQuantity, columnsQuantity);
+        matrix::Matrix *differenceMatrix = NULL;
 
         for (matrix::Matrix *temp : matricesToSubtract)
         {
-            differenceMatrix->difference_between_matrices(temp);
+            if (differenceMatrix == NULL)
+            {
+                differenceMatrix = get_matrix_zero(temp->get_lines_quantity(), temp->get_columns_quantity());
+
+                differenceMatrix->set_to_equal_to(temp);
+            }
+            else
+            {
+                differenceMatrix->difference_between_matrices(temp);
+            }
         }
 
         std::string differenceMatrixName = this->insert_matrix(differenceMatrix);
@@ -919,4 +934,8 @@ std::string main_utils::MainUtils::difference_between_matrices()
 
     matricesToSubtract.clear();
     return strToReturn;
+}
+
+std::string main_utils::MainUtils::multiply_matrix_by_constant()
+{
 }

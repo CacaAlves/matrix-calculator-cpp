@@ -222,3 +222,23 @@ bool matrix::Matrix::is_in_last_position()
     bool isLastPosition = (((this->currentTargedLine) == (this->linesQuantity - 1)) &&
                            ((this->currentTargedColumn) == (this->columnsQuantity - 1)));
 }
+
+void matrix::Matrix::set_to_equal_to(matrix::Matrix *matchMatrix)
+{
+    if (!(this->get_lines_quantity() == matchMatrix->get_lines_quantity() &&
+          this->get_columns_quantity() == matchMatrix->get_columns_quantity()))
+    {
+        return;
+    }
+
+    for (int line = 0; line < this->get_lines_quantity(); line++)
+    {
+        for (int column = 0; column < this->get_columns_quantity(); column++)
+        {
+            const int data = (matchMatrix)->get_item(line, column)->get_data();
+            matrix::MatrixItem *item = (this->get_item(line, column));
+            item->set_data(data);
+        }
+    }
+
+}

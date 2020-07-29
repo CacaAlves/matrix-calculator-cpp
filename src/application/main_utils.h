@@ -63,6 +63,7 @@ namespace main_utils
         std::string equality_between_matrices();
         std::string sum_of_matrices();
         std::string difference_between_matrices();
+        std::string multiply_matrix_by_constant();
     };
 } // namespace main_utils
 
