@@ -16,6 +16,7 @@ namespace matrix
         Matrix();
         bool equality_between_matrices(Matrix *matrix);
         void sum_of_two_matrix(Matrix *matrix);
+        void difference_between_matrices(Matrix *matrix);
         Matrix(int linesQuantity, int columnsQuantity);
         ~Matrix();
         void add_line(matrix::MatrixLine *line);

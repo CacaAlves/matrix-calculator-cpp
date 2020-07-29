@@ -64,6 +64,28 @@ void matrix::Matrix::sum_of_two_matrix(matrix::Matrix *matrixToSum)
     }
 }
 
+void matrix::Matrix::difference_between_matrices(matrix::Matrix *matrixToSum)
+{
+    if (!(this->get_lines_quantity() == matrixToSum->get_lines_quantity() &&
+          this->get_columns_quantity() == matrixToSum->get_columns_quantity()))
+    {
+        return;
+    }
+
+    for (int line = 0; line < this->get_lines_quantity(); line++)
+    {
+        for (int column = 0; column < this->get_columns_quantity(); column++)
+        {
+            const int currentPositionData = (this->get_item(line, column)->get_data());
+            const int currentPositionDataMatrixToSum = (matrixToSum->get_item(line, column)->get_data());
+
+            matrix::MatrixItem *currentPosition = (this->get_item(line, column));
+
+            currentPosition->set_data(currentPositionData - currentPositionDataMatrixToSum);
+        }
+    }
+}
+
 matrix::Matrix::Matrix(int linesQuantity, int columnsQuantity)
 {
     this->linesQuantity = linesQuantity;

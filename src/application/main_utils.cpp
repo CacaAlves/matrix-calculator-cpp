@@ -37,36 +37,73 @@ bool main_utils::MainUtils::is_menu_a_valid_number()
     return isAValidNumber;
 }
 
-int main_utils::MainUtils::filtered_menu_input()
+bool main_utils::MainUtils::is_a_digit(char c)
 {
-    std::string input;
-    std::string filteredInput = "";
-    int menuToReturn;
+    bool isDigit;
 
-    std::cout << std::endl
-              << this->tab;
-
-    std::cin >> input;
-
-    switch (input.size())
+    switch (c)
     {
-    case 1:
-        filteredInput += input.at(0);
-
-        menuToReturn = (this->str_to_number(filteredInput));
-        break;
-    case 2:
-        filteredInput += input.at(0);
-        filteredInput += input.at(1);
-
-        menuToReturn = (this->str_to_number(filteredInput));
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+        isDigit = true;
         break;
     default:
-        menuToReturn = -1;
+        isDigit = false;
         break;
     }
 
-    return menuToReturn;
+    return isDigit;
+}
+
+int main_utils::MainUtils::filtered_input()
+{
+    std::string input;
+    std::string filteredInput = "";
+    int inputToReturn = 0;
+    bool isANumber = true;
+
+    std::cin >> input;
+
+    for (int i = 0; i < input.size(); i++)
+    {
+        if (i == 0 && input.at(0) == '-')
+        {
+            if (input.size() > 1)
+            {
+                filteredInput += input.at(0);
+            }
+            else
+            {
+                isANumber = false;
+                break;
+            }
+        }
+        else
+        {
+
+            if (this->is_a_digit(input.at(i)))
+            {
+                filteredInput += input.at(i);
+            }
+            else
+            {
+                isANumber = false;
+                break;
+            }
+        }
+    }
+
+    inputToReturn = (isANumber ? (this->str_to_number(filteredInput)) : -1);
+
+    return inputToReturn;
 }
 
 void main_utils::MainUtils::print_receive_menu()
@@ -83,7 +120,9 @@ void main_utils::MainUtils::print_receive_menu()
     std::cout << this->tab << "7 - hints.\n";
     std::cout << this->tab << "0 - exit program.\n";
 
-    this->menu = (this->filtered_menu_input());
+    std::cout << std::endl
+              << this->tab;
+    this->menu = (this->filtered_input());
 
     std::cout << std::endl;
 }
@@ -179,7 +218,9 @@ void main_utils::MainUtils::print_receive_menu_hard_disk()
     std::cout << this->tab << "3 - delete matrix from the storage.\n";
     std::cout << this->tab << "0 - cancel.\n";
 
-    this->menuHardDisk = (this->filtered_menu_input());
+    std::cout << std::endl
+              << this->tab;
+    this->menuHardDisk = (this->filtered_input());
 
     std::cout << std::endl;
 }
@@ -264,7 +305,9 @@ void main_utils::MainUtils::print_receive_menu_operations()
     std::cout << this->tab << "4 - multiply a matrice by a constant.\n";
     std::cout << this->tab << "0 - cancel.\n";
 
-    this->menuOperations = (this->filtered_menu_input());
+    std::cout << std::endl
+              << this->tab;
+    this->menuOperations = (this->filtered_input());
 
     std::cout << std::endl;
 }
@@ -328,7 +371,7 @@ main_utils::ActionResponse *main_utils::MainUtils::perform_action_menu_operation
     }
     case 3:
     {
-        std::string responseMessage = this->delete_matrix_hard_disk();
+        std::string responseMessage = this->difference_between_matrices();
         response->set_action_response(responseMessage, true);
         break;
     }
@@ -420,13 +463,27 @@ matrix::Matrix *main_utils::MainUtils::get_matrix_zero(int lines, int columns)
 
 std::string main_utils::MainUtils::receive_matrix()
 {
+
+    int lines = 0, columns = 0;
+
     std::cout << this->tab << "Input the number of lines and then the number columns of the new matrix.\n";
 
-    int lines, columns;
-    std::cout << this->tab;
-    std::cin >> lines;
-    std::cout << this->tab;
-    std::cin >> columns;
+    do 
+    {
+        if (lines < 0 || columns < 0)
+        {
+            std::cout << this->tab << "Input a positive number.\n";
+        }
+
+        std::cout << this->tab;
+        lines = this->filtered_input();
+
+        std::cout << this->tab;
+        columns = this->filtered_input();
+
+        system("clear");
+
+    } while (lines < 0 || columns < 0);
 
     matrix::Matrix *newMatrix = this->get_matrix_zero(lines, columns);
 
@@ -517,7 +574,7 @@ void main_utils::MainUtils::print_hints()
     while (exit != 0)
     {
         std::cout << this->tab;
-        std::cin >> exit;
+        exit = this->filtered_input();
     }
 }
 
@@ -710,7 +767,7 @@ std::string main_utils::MainUtils::sum_of_matrices()
 
     while (matrixName != "0" && ableToSum)
     {
-        std::cout << this->tab << "Input a matrix name to sum (input 0 to stop): ";
+        std::cout << this->tab << "Input a matrix name to sum (input 0 to stop inputting): ";
         std::cin >> matrixName;
 
         if (matrixName != "0")
@@ -747,11 +804,12 @@ std::string main_utils::MainUtils::sum_of_matrices()
             }
             else
             {
-                ableToSum = (linesQuantity == temp->get_lines_quantity() && columnsQuantity == temp->get_columns_quantity());
+                allSameSize = (linesQuantity == temp->get_lines_quantity() && columnsQuantity == temp->get_columns_quantity());
             }
 
-            if (!ableToSum)
+            if (!allSameSize)
             {
+                ableToSum = false;
                 break;
             }
         }
@@ -777,5 +835,88 @@ std::string main_utils::MainUtils::sum_of_matrices()
     }
 
     matricesToSum.clear();
+    return strToReturn;
+}
+
+std::string main_utils::MainUtils::difference_between_matrices()
+{
+    std::string strToReturn;
+    bool ableToSubtract = true;
+
+    std::string matrixName;
+    std::vector<matrix::Matrix *> matricesToSubtract;
+    int linesQuantity;
+    int columnsQuantity;
+
+    while (matrixName != "0" && ableToSubtract)
+    {
+        std::cout << this->tab << "Input a matrix name to subtract (input 0 to stop inputting): ";
+        std::cin >> matrixName;
+
+        if (matrixName != "0")
+        {
+
+            matrix::Matrix *matrix = find_matrix_in_matrices(matrixName);
+
+            if (matrix == NULL)
+            {
+                strToReturn = this->tab + "One of the matrices in the input does not exist\n";
+                ableToSubtract = false;
+            }
+            else
+            {
+                matricesToSubtract.push_back(matrix);
+                ableToSubtract = true;
+            }
+        }
+    }
+
+    if (ableToSubtract)
+    {
+        bool allSameSize = true;
+
+        linesQuantity = -1;
+        columnsQuantity = -1;
+
+        for (matrix::Matrix *temp : matricesToSubtract)
+        {
+            if (linesQuantity == -1 && columnsQuantity == -1) //first loop
+            {
+                linesQuantity = temp->get_lines_quantity();
+                columnsQuantity = temp->get_columns_quantity();
+            }
+            else
+            {
+                allSameSize = (linesQuantity == temp->get_lines_quantity() && columnsQuantity == temp->get_columns_quantity());
+            }
+
+            if (!allSameSize)
+            {
+                ableToSubtract = false;
+                break;
+            }
+        }
+    }
+
+    if (ableToSubtract)
+    {
+        matrix::Matrix *differenceMatrix = get_matrix_zero(linesQuantity, columnsQuantity);
+
+        for (matrix::Matrix *temp : matricesToSubtract)
+        {
+            differenceMatrix->difference_between_matrices(temp);
+        }
+
+        std::string differenceMatrixName = this->insert_matrix(differenceMatrix);
+        strToReturn = this->tab + "The new matrix was stored in the constant: " + differenceMatrixName + "\n";
+
+        differenceMatrix->set_current_targed_line(differenceMatrix->get_lines_quantity()); //setting the target to after the last element
+    }
+    else if (!ableToSubtract && strToReturn.size() == 0)
+    {
+        strToReturn = this->tab + "Something went wrong: Unable to subtract\n";
+    }
+
+    matricesToSubtract.clear();
     return strToReturn;
 }

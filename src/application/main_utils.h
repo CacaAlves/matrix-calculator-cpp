@@ -33,7 +33,7 @@ namespace main_utils
 
     private:
         std::map<std::string, matrix::Matrix *> matrices;
-        int filtered_menu_input();
+        int filtered_input();
         void clear_matrices();
         void delete_matrix(std::string name);
         int menu;
@@ -59,8 +59,10 @@ namespace main_utils
         void print_receive_menu_operations();
         bool is_menu_operations_a_valid_number();
         ActionResponse *perform_action_menu_operations();
+        bool is_a_digit(char c);
         std::string equality_between_matrices();
         std::string sum_of_matrices();
+        std::string difference_between_matrices();
     };
 } // namespace main_utils
 
