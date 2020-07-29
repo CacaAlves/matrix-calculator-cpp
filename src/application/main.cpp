@@ -1,9 +1,12 @@
 #include <iostream>
-#include "main_utils.h"
+#include "./main_utils/main_utils.h"
+#include "./main_utils/menu_main.h"
 
 int main(int argc, char const *argv[])
 {
-    main_utils::MainUtils utils;
+    main_utils::MainUtils *utils = new main_utils::MainUtils();
+    main_utils::MenuMain *menuMain = new main_utils::MenuMain();
+    menuMain->set_main_utils(utils);
 
     bool running = true;
     bool firstRunningLoop = true;
@@ -14,17 +17,17 @@ int main(int argc, char const *argv[])
         if (firstRunningLoop)
         {
             system("clear");
-            utils.welcome_message();
+            menuMain->welcome_message();
 
             firstRunningLoop = false;
         }
         do
         {
-            utils.print_receive_menu();
+            menuMain->print_receive_menu();
             system("clear");
-        } while (!(utils.is_menu_a_valid_number()));
+        } while (!(menuMain->is_menu_a_valid_number()));
 
-        response = utils.perform_action_menu();
+        response = menuMain->perform_action_menu();
         system("clear");
 
         std::cout << response->message;
