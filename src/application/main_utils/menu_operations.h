@@ -18,6 +18,7 @@ namespace main_utils
         std::string sum_of_matrices();
         std::string difference_between_matrices();
         std::string multiply_matrix_by_constant();
+        std::string multiply_matrix_by_matrix();
         void set_main_utils(main_utils::MainUtils *utils);
 
     private:

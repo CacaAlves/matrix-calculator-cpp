@@ -151,26 +151,6 @@ matrix::Matrix *main_utils::MainUtils::find_matrix_in_matrices(std::string name)
     }
 }
 
-matrix::Matrix *main_utils::MainUtils::get_matrix_zero(int lines, int columns)
-{
-    matrix::Matrix *matrixZero = new matrix::Matrix(lines, columns);
-
-    for (int i = 0; i < matrixZero->get_lines_quantity(); i++)
-    {
-        matrix::MatrixLine *tempLine = new matrix::MatrixLine();
-        matrixZero->add_line(tempLine);
-
-        for (int j = 0; j < matrixZero->get_columns_quantity(); j++)
-        {
-            tempLine->add_element(0);
-        }
-    }
-
-    return matrixZero;
-}
-
-
-
 std::string main_utils::MainUtils::delete_matrix_from_matrices()
 {
     std::string strToReturn;

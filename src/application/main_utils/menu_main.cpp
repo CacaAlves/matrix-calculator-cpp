@@ -179,7 +179,8 @@ std::string main_utils::MenuMain::receive_matrix()
 
     } while (lines < 0 || columns < 0);
 
-    matrix::Matrix *newMatrix = (this->utils)->get_matrix_zero(lines, columns);
+    matrix::Matrix *newMatrix = new matrix::Matrix(lines, columns);
+    newMatrix->set_matrix();
 
     bool insertionOccurring = true;
     while (insertionOccurring)

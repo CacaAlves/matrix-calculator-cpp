@@ -86,6 +86,38 @@ void matrix::Matrix::difference_between_matrices(matrix::Matrix *matrixToSum)
     }
 }
 
+matrix::Matrix *matrix::Matrix::multiply_by_matrix(matrix::Matrix *matrixToMultiply)
+{
+    if (this->columnsQuantity != matrixToMultiply->get_lines_quantity())
+    {
+        return NULL;
+    }
+
+    matrix::Matrix *multiplicationMatrix = new matrix::Matrix(this->linesQuantity, matrixToMultiply->get_columns_quantity());
+    multiplicationMatrix->set_matrix();
+    multiplicationMatrix->set_current_targed_line(multiplicationMatrix->get_lines_quantity());
+
+    for (int matrixLine = 0; matrixLine < this->get_lines_quantity(); matrixLine++)
+    {
+
+        for (int matrixToMultiplyColumn = 0; matrixToMultiplyColumn < matrixToMultiply->get_columns_quantity(); matrixToMultiplyColumn++)
+        {
+            int sum = 0;
+            for (int matrixToMultiplyLine = 0; matrixToMultiplyLine < matrixToMultiply->get_lines_quantity(); matrixToMultiplyLine++)
+            {
+                const int matrixPositionData = (this->get_item(matrixLine, matrixToMultiplyLine)->get_data());
+                const int matrixToMultiplyPositionData = (matrixToMultiply->get_item(matrixToMultiplyLine, matrixToMultiplyColumn)->get_data());
+                
+                sum += (matrixPositionData * matrixToMultiplyPositionData);
+            }
+
+            multiplicationMatrix->get_item(matrixLine, matrixToMultiplyColumn)->set_data(sum);
+        }
+    }
+
+    return multiplicationMatrix;
+}
+
 matrix::Matrix::Matrix(int linesQuantity, int columnsQuantity)
 {
     this->linesQuantity = linesQuantity;
@@ -240,5 +272,18 @@ void matrix::Matrix::set_to_equal_to(matrix::Matrix *matchMatrix)
             item->set_data(data);
         }
     }
+}
 
+void matrix::Matrix::set_matrix()
+{
+    for (int i = 0; i < this->get_lines_quantity(); i++)
+    {
+        matrix::MatrixLine *tempLine = new matrix::MatrixLine();
+        this->add_line(tempLine);
+
+        for (int j = 0; j < this->get_columns_quantity(); j++)
+        {
+            tempLine->add_element(0);
+        }
+    }
 }

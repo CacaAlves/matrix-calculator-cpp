@@ -17,6 +17,7 @@ namespace matrix
         bool equality_between_matrices(Matrix *matrix);
         void sum_of_two_matrix(Matrix *matrix);
         void difference_between_matrices(Matrix *matrix);
+        Matrix *multiply_by_matrix(Matrix *matrix);
         Matrix(int linesQuantity, int columnsQuantity);
         ~Matrix();
         void add_line(matrix::MatrixLine *line);
@@ -32,6 +33,7 @@ namespace matrix
         void print_matrix(bool skipOption = false);
         bool is_in_last_position();
         void set_to_equal_to(Matrix *matchMatrix);
+        void set_matrix();
 
     private:
         std::vector<matrix::MatrixLine *> *lines;
