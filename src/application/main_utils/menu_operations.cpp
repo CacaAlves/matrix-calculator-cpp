@@ -10,6 +10,7 @@ void main_utils::MenuOperations::print_receive_menu_operations()
     std::cout << (this->utils)->tab << "3 - subtraction between two (or more) matrices.\n";
     std::cout << (this->utils)->tab << "4 - multiply a matrix by a constant.\n";
     std::cout << (this->utils)->tab << "5 - multiply a matrix by a matrix.\n";
+    std::cout << (this->utils)->tab << "6 - is inverse.\n";
     std::cout << (this->utils)->tab << "0 - cancel.\n";
 
     std::cout << std::endl
@@ -30,6 +31,7 @@ bool main_utils::MenuOperations::is_menu_operations_a_valid_number()
     case 3:
     case 4:
     case 5:
+    case 6:
     case 0:
         isAValidNumber = true;
         break;
@@ -92,6 +94,12 @@ main_utils::ActionResponse *main_utils::MenuOperations::perform_action_menu_oper
     case 5:
     {
         std::string responseMessage = this->multiply_matrix_by_matrix();
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 6:
+    {
+        std::string responseMessage = this->is_inverse_matrix();
         response->set_action_response(responseMessage, true);
         break;
     }
@@ -325,7 +333,7 @@ std::string main_utils::MenuOperations::multiply_matrix_by_constant()
     std::string matrixName;
     int constant;
 
-    std::cout << (this->utils)->tab << "Input a matrix name to sum: ";
+    std::cout << (this->utils)->tab << "Input a matrix name: ";
     std::cin >> matrixName;
 
     std::cout << (this->utils)->tab << "Input a constant to multiply: ";
@@ -400,6 +408,45 @@ std::string main_utils::MenuOperations::multiply_matrix_by_matrix()
     else if (strToReturn.size() == 0)
     {
         strToReturn = (this->utils)->tab + "Something went wrong in the multiplication\n";
+    }
+
+    return strToReturn;
+}
+
+std::string main_utils::MenuOperations::is_inverse_matrix()
+{
+    std::string strToReturn;
+    bool isInverse;
+
+    std::string matrix1Name;
+    std::string matrix2Name;
+
+    std::cout << (this->utils)->tab << "Input a matrix name: ";
+    std::cin >> matrix1Name;
+
+    std::cout << (this->utils)->tab << "Input a second matrix name to verify if it is previous's inverse: ";
+    std::cin >> matrix2Name;
+
+    matrix::Matrix *matrix1 = (this->utils)->find_matrix_in_matrices(matrix1Name);
+    matrix::Matrix *matrix2 = (this->utils)->find_matrix_in_matrices(matrix2Name);
+
+    if (matrix1 == NULL || matrix2 == NULL)
+    {
+        isInverse = false;
+        strToReturn = (this->utils)->tab + "One or both of the matrices are not in the list of variables\n";
+    }
+    else
+    {
+        isInverse = matrix1->is_inverse(matrix2);
+    }
+
+    if (isInverse)
+    {
+        strToReturn = (this->utils)->tab + "The matrix " + matrix2Name + " is inverse of matrix " + matrix1Name + "\n";
+    }
+    else if (strToReturn.size() == 0)
+    {
+        strToReturn = (this->utils)->tab + "The matrix " + matrix2Name + " is NOT inverse of matrix " + matrix1Name + "\n";
     }
 
     return strToReturn;

@@ -164,6 +164,58 @@ matrix::Matrix *matrix::Matrix::multiply_by_matrix(matrix::Matrix *matrixToMulti
     return multiplicationMatrix;
 }
 
+bool matrix::Matrix::is_inverse(Matrix *matrix)
+{
+    matrix::Matrix *multiplicationMatrix = this->multiply_by_matrix(matrix);
+    bool isInverse;
+
+    if (multiplicationMatrix != NULL)
+    {
+        isInverse = multiplicationMatrix->is_matrix_1();
+    }
+    else
+    {
+        isInverse = false;
+    }
+
+    return isInverse;
+}
+
+bool matrix::Matrix::is_matrix_1()
+{
+    bool isMatrix1;
+
+    for (int line = 0; line < this->get_lines_quantity(); line++)
+    {
+        for (int column = 0; column < this->get_columns_quantity(); column++)
+        {
+            bool isMatrixMainDiagonal = (line == column);
+            const int value = (this->get_item(line, column))->get_data();
+
+            if (isMatrixMainDiagonal)
+            {
+                isMatrix1 = (value == 1);
+            }
+            else
+            {
+                isMatrix1 = (value == 0);
+            }
+
+            if (!isMatrix1)
+            {
+                break;
+            }
+        }
+
+        if (!isMatrix1)
+        {
+            break;
+        }
+    }
+
+    return isMatrix1;
+}
+
 void matrix::Matrix::add_line(matrix::MatrixLine *line)
 {
     (this->lines)->push_back(line);

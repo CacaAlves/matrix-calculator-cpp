@@ -21,6 +21,8 @@ namespace matrix
         void difference_between_matrices(Matrix *matrix);
         Matrix *multiply_by_constant(const int constant);
         Matrix *multiply_by_matrix(Matrix *matrix);
+        bool is_inverse(Matrix *matrix);
+        bool is_matrix_1();
         Matrix(int linesQuantity, int columnsQuantity);
         void add_line(matrix::MatrixLine *line);
         int get_lines_quantity();
