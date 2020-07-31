@@ -123,9 +123,13 @@ std::string main_utils::MainUtils::insert_matrix(matrix::Matrix *matrix)
     }
     else
     {
-        std::string lastPairName = (--(this->matrices)->end())->first;
-        lastPairName.at(0) = '0';
-        int lastPairNameNumber = str_to_number(lastPairName);
+        std::string matrixName = (this->get_greater_matrix_in_matrices());
+        matrix::Matrix *matrix = this->find_matrix_in_matrices(matrixName);
+
+        std::string lastPairName = this->get_greater_matrix_in_matrices();
+        std::string numberStrFormat = lastPairName.substr(1);
+
+        int lastPairNameNumber = this->str_to_number(numberStrFormat);
         int newPairNameNumber = lastPairNameNumber + 1;
 
         name += std::to_string(newPairNameNumber);
@@ -168,4 +172,72 @@ std::string main_utils::MainUtils::delete_matrix_from_matrices()
 
     strToReturn = this->tab + "Deleted, if any.\n";
     return strToReturn;
+}
+
+std::string main_utils::MainUtils::get_greater_matrix_in_matrices()
+{
+    std::string greaterName = "";
+
+    if (!(this->matrices)->empty())
+    {
+        for (auto it = (this->matrices)->begin(); it != (this->matrices)->end(); it++)
+        {
+            if (greaterName.size() == 0)
+            {
+                greaterName = it->first;
+            }
+            else
+            {
+                int greaterNumber = this->str_to_number(
+                    (greaterName).substr(1));
+
+                std::string matrixName = it->first;
+                int matrixNumber = str_to_number(
+                    (it->first).substr(1));
+
+                if (matrixNumber > greaterNumber)
+                {
+                    greaterName = matrixName;
+                }
+            }
+        }
+    }
+
+    return greaterName;
+}
+
+std::string main_utils::MainUtils::get_first_matrix_in_matrices()
+{
+    std::string strToReturn = "";
+    if (!(this->matrices)->empty())
+    {
+        strToReturn = "m1";
+    }
+
+    return strToReturn;
+}
+
+std::string main_utils::MainUtils::get_next_to(std::string currentMatrixName)
+{
+    int currentNumber = this->str_to_number(
+        (currentMatrixName).substr(1));
+    std::string nextName = "";
+
+    if (!(this->matrices)->empty())
+    {
+        for (auto it = (this->matrices)->begin(); it != (this->matrices)->end(); it++)
+        {
+            std::string matrixName = it->first;
+            int matrixNumber = str_to_number(
+                (it->first).substr(1));
+
+            if (matrixNumber - 1 == currentNumber)
+            {
+                nextName = matrixName;
+                break;
+            }
+        }
+    }
+
+    return nextName;
 }

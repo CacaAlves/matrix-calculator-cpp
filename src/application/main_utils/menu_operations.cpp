@@ -6,8 +6,8 @@ void main_utils::MenuOperations::print_receive_menu_operations()
               << (this->utils)->tab << "Menu operations\n\n";
     std::cout << (this->utils)->tab << "Enter a number:\n";
     std::cout << (this->utils)->tab << "1 - equality between matrices.\n";
-    std::cout << (this->utils)->tab << "2 - sum two matrices.\n";
-    std::cout << (this->utils)->tab << "3 - subtraction between two matrices.\n";
+    std::cout << (this->utils)->tab << "2 - sum two (or more) matrices.\n";
+    std::cout << (this->utils)->tab << "3 - subtraction between two (or more) matrices.\n";
     std::cout << (this->utils)->tab << "4 - multiply a matrix by a constant.\n";
     std::cout << (this->utils)->tab << "5 - multiply a matrix by a matrix.\n";
     std::cout << (this->utils)->tab << "0 - cancel.\n";
@@ -206,7 +206,6 @@ std::string main_utils::MenuOperations::sum_of_matrices()
     if (ableToSum)
     {
         matrix::Matrix *sumMatrix = new matrix::Matrix(linesQuantity, columnsQuantity);
-        sumMatrix->set_matrix();
 
         for (matrix::Matrix *temp : matricesToSum)
         {
@@ -216,7 +215,7 @@ std::string main_utils::MenuOperations::sum_of_matrices()
         std::string sumMatrixName = (this->utils)->insert_matrix(sumMatrix);
         strToReturn = (this->utils)->tab + "The new matrix was stored in the constant: " + sumMatrixName + "\n";
 
-        sumMatrix->set_current_targed_line(sumMatrix->get_lines_quantity()); //setting the target to after the last element
+        sumMatrix->set_target_to_after_end();
     }
     else if (!ableToSum && strToReturn.size() == 0)
     {
@@ -296,7 +295,6 @@ std::string main_utils::MenuOperations::difference_between_matrices()
             if (differenceMatrix == NULL)
             {
                 differenceMatrix = new matrix::Matrix(temp->get_lines_quantity(), temp->get_columns_quantity());
-                differenceMatrix->set_matrix();
 
                 differenceMatrix->set_to_equal_to(temp);
             }
@@ -309,7 +307,7 @@ std::string main_utils::MenuOperations::difference_between_matrices()
         std::string differenceMatrixName = (this->utils)->insert_matrix(differenceMatrix);
         strToReturn = (this->utils)->tab + "The new matrix was stored in the constant: " + differenceMatrixName + "\n";
 
-        differenceMatrix->set_current_targed_line(differenceMatrix->get_lines_quantity()); //setting the target to after the last element
+        differenceMatrix->set_target_to_after_end();
     }
     else if (!ableToSubtract && strToReturn.size() == 0)
     {
@@ -348,28 +346,12 @@ std::string main_utils::MenuOperations::multiply_matrix_by_constant()
     }
     else
     {
-        int linesQuantity = matrix->get_lines_quantity();
-        int columnsQuantity = matrix->get_columns_quantity();
-
-        multipliedMatrix = new matrix::Matrix(linesQuantity, columnsQuantity);
-        multipliedMatrix->set_matrix();
-        multipliedMatrix->set_to_equal_to(matrix);
-    
-
-        for (int line = 0; line < multipliedMatrix->get_lines_quantity(); line++)
-        {
-            for (int column = 0; column < multipliedMatrix->get_columns_quantity(); column++)
-            {
-                matrix::MatrixItem *item = multipliedMatrix->get_item(line, column);
-                int currentData = item->get_data();
-                item->set_data(currentData * constant);
-            }
-        }
+        matrix::Matrix *multipliedMatrix = matrix->multiply_by_constant(constant);
 
         std::string multipliedMatrixName = (this->utils)->insert_matrix(multipliedMatrix);
         strToReturn = (this->utils)->tab + "The multiplied matrix was stored in the constant: " + multipliedMatrixName + "\n";
 
-        multipliedMatrix->set_current_targed_line(multipliedMatrix->get_lines_quantity()); //setting the target to after the last element
+        multipliedMatrix->set_target_to_after_end();
     }
 
     return strToReturn;

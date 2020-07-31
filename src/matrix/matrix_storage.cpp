@@ -86,20 +86,20 @@ matrix::Matrix *matrix::MatrixStorage::read_from_hard_disk(std::string fileName)
 
         matrix = new matrix::Matrix(linesQuantity, columnsQuantity);
 
+
+
         for (int i = 0; i < matrix->get_lines_quantity(); i++)
         {
-            matrix::MatrixLine *tempLine = new matrix::MatrixLine();
-            matrix->add_line(tempLine);
-
             for (int j = 0; j < matrix->get_columns_quantity(); j++)
             {
                 int element;
                 fscanf(file, "%d", &element);
-                tempLine->add_element(element);
+                matrix->set_item(i, j, element);
+
             }
         }
 
-        matrix->set_current_targed_line(matrix->get_lines_quantity()); //setting the target to the next of the end
+        matrix->set_target_to_after_end();
         fclose(file);
     }
 

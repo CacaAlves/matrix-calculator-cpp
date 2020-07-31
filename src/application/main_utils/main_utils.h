@@ -30,6 +30,9 @@ namespace main_utils
         std::string delete_matrix_from_matrices();
         std::map<std::string, matrix::Matrix *> *matrices;
         long long int str_to_number(const std::string str);
+        std::string get_greater_matrix_in_matrices();
+        std::string get_first_matrix_in_matrices();
+        std::string get_next_to(std::string currentMatrixName);
 
     private:
         void clear_matrices();

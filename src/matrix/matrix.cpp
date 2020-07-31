@@ -8,6 +8,35 @@ matrix::Matrix::Matrix()
     this->lines = new std::vector<matrix::MatrixLine *>();
 }
 
+matrix::Matrix::Matrix(int linesQuantity, int columnsQuantity)
+{
+    this->linesQuantity = linesQuantity;
+    this->columnsQuantity = columnsQuantity;
+
+    this->currentTargedLine = 0;
+    this->currentTargedColumn = 0;
+
+    this->lines = new std::vector<matrix::MatrixLine *>();
+
+    this->set_matrix();
+}
+
+matrix::Matrix::~Matrix()
+{
+    for (matrix::MatrixLine *line : (*this->lines))
+    {
+        delete line;
+    }
+
+    delete (this->lines);
+}
+
+void matrix::Matrix::set_target_to_after_end()
+{
+    this->set_current_targed_line(
+        (this->get_lines_quantity()));
+}
+
 bool matrix::Matrix::equality_between_matrices(matrix::Matrix *matrix)
 {
     if (!(this->get_lines_quantity() == matrix->get_lines_quantity() &&
@@ -86,6 +115,24 @@ void matrix::Matrix::difference_between_matrices(matrix::Matrix *matrixToSum)
     }
 }
 
+matrix::Matrix *matrix::Matrix::multiply_by_constant(const int constant)
+{
+    matrix::Matrix *multipliedMatrix = new matrix::Matrix(this->get_lines_quantity(), this->get_columns_quantity());
+    multipliedMatrix->set_to_equal_to(this);
+
+    for (int line = 0; line < multipliedMatrix->get_lines_quantity(); line++)
+    {
+        for (int column = 0; column < multipliedMatrix->get_columns_quantity(); column++)
+        {
+            matrix::MatrixItem *item = multipliedMatrix->get_item(line, column);
+            int currentData = item->get_data();
+            item->set_data(currentData * constant);
+        }
+    }
+
+    return multipliedMatrix;
+}
+
 matrix::Matrix *matrix::Matrix::multiply_by_matrix(matrix::Matrix *matrixToMultiply)
 {
     if (this->columnsQuantity != matrixToMultiply->get_lines_quantity())
@@ -94,8 +141,7 @@ matrix::Matrix *matrix::Matrix::multiply_by_matrix(matrix::Matrix *matrixToMulti
     }
 
     matrix::Matrix *multiplicationMatrix = new matrix::Matrix(this->linesQuantity, matrixToMultiply->get_columns_quantity());
-    multiplicationMatrix->set_matrix();
-    multiplicationMatrix->set_current_targed_line(multiplicationMatrix->get_lines_quantity());
+    multiplicationMatrix->set_target_to_after_end();
 
     for (int matrixLine = 0; matrixLine < this->get_lines_quantity(); matrixLine++)
     {
@@ -107,7 +153,7 @@ matrix::Matrix *matrix::Matrix::multiply_by_matrix(matrix::Matrix *matrixToMulti
             {
                 const int matrixPositionData = (this->get_item(matrixLine, matrixToMultiplyLine)->get_data());
                 const int matrixToMultiplyPositionData = (matrixToMultiply->get_item(matrixToMultiplyLine, matrixToMultiplyColumn)->get_data());
-                
+
                 sum += (matrixPositionData * matrixToMultiplyPositionData);
             }
 
@@ -116,27 +162,6 @@ matrix::Matrix *matrix::Matrix::multiply_by_matrix(matrix::Matrix *matrixToMulti
     }
 
     return multiplicationMatrix;
-}
-
-matrix::Matrix::Matrix(int linesQuantity, int columnsQuantity)
-{
-    this->linesQuantity = linesQuantity;
-    this->columnsQuantity = columnsQuantity;
-
-    this->currentTargedLine = 0;
-    this->currentTargedColumn = 0;
-
-    this->lines = new std::vector<matrix::MatrixLine *>();
-}
-
-matrix::Matrix::~Matrix()
-{
-    for (matrix::MatrixLine *line : (*this->lines))
-    {
-        delete line;
-    }
-
-    delete (this->lines);
 }
 
 void matrix::Matrix::add_line(matrix::MatrixLine *line)
@@ -185,6 +210,12 @@ matrix::MatrixItem *matrix::Matrix::get_item(int line, int column)
     matrix::MatrixItem *item = matrixLine->get_element(column);
 
     return item;
+}
+
+void matrix::Matrix::set_item(int line, int column, int value)
+{
+    matrix::MatrixItem *item = this->get_item(line, column);
+    item->set_data(value);
 }
 
 void matrix::Matrix::add_item_matrix(const int data)

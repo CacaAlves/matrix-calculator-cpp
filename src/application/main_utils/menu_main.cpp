@@ -180,7 +180,6 @@ std::string main_utils::MenuMain::receive_matrix()
     } while (lines < 0 || columns < 0);
 
     matrix::Matrix *newMatrix = new matrix::Matrix(lines, columns);
-    newMatrix->set_matrix();
 
     bool insertionOccurring = true;
     while (insertionOccurring)
@@ -216,7 +215,7 @@ std::string main_utils::MenuMain::receive_matrix()
             if (newMatrix->is_in_last_position())
             {
                 insertionOccurring = false;
-                newMatrix->set_current_targed_line(newMatrix->get_current_targed_line() + 1);
+                newMatrix->set_target_to_after_end();
             }
             else
             {
@@ -247,6 +246,11 @@ std::string main_utils::MenuMain::print_matrix()
     matrix::Matrix *matrix = (this->utils)->find_matrix_in_matrices(matrixName);
     if (matrix != NULL)
     {
+        const int linesQuantity = matrix->get_lines_quantity();
+        const int columnsQuantity = matrix->get_columns_quantity();
+
+        std::cout << (this->utils)->tab << "number of lines: " << std::to_string(linesQuantity)
+                  << ", number of columns: " << std::to_string(columnsQuantity) << std::endl;
         matrix->print_matrix(true);
         responseMessage = "";
     }
@@ -269,15 +273,22 @@ std::string main_utils::MenuMain::print_all_matrices()
     else
     {
         responseMessage = "";
-        for (auto it = ((this->utils)->matrices)->begin(); it != ((this->utils)->matrices)->end(); it++)
+        std::string tempMatrixName = (this->utils)->get_first_matrix_in_matrices();
+        matrix::Matrix *tempMatrix = (this->utils)->find_matrix_in_matrices(tempMatrixName);
+
+        while (tempMatrix != NULL)
         {
-            std::cout << (this->utils)->tab << "Matrix " << it->first << ": \n";
+            bool isLastMatrix = (tempMatrixName == (this->utils)->get_greater_matrix_in_matrices());
 
-            matrix::Matrix *matrix = it->second;
-            bool isLastOne = ((++it) == ((this->utils)->matrices)->end());
-            it--;
+            const int linesQuantity = tempMatrix->get_lines_quantity();
+            const int columnsQuantity = tempMatrix->get_columns_quantity();
+            std::cout << (this->utils)->tab << "Matrix: " << tempMatrixName << std::endl
+                      << (this->utils)->tab << "number of lines: " << std::to_string(linesQuantity)
+                      << ", number of columns: " << std::to_string(columnsQuantity) << std::endl;
+            tempMatrix->print_matrix(isLastMatrix);
 
-            matrix->print_matrix(isLastOne);
+            tempMatrixName = (this->utils)->get_next_to(tempMatrixName);
+            tempMatrix = (this->utils)->find_matrix_in_matrices(tempMatrixName);
 
             std::cout << std::endl;
         }

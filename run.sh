@@ -1,0 +1,2 @@
+g++ src/application/main.cpp src/application/main_utils/main_utils.cpp src/application/main_utils/menu_operations.cpp src/application/main_utils/menu_hard_disk.cpp src/application/main_utils/menu_main.cpp  src/matrix/matrix.cpp src/matrix/matrix_line.cpp src/matrix/matrix_item.cpp src/matrix/matrix_storage.cpp -o build/run.out;
+./build/run.out;

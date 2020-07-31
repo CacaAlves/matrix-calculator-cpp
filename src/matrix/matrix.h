@@ -14,12 +14,14 @@ namespace matrix
     public:
         const std::string tab = "\t\t\t\t\t\t";
         Matrix();
+        ~Matrix();
+        void set_target_to_after_end();
         bool equality_between_matrices(Matrix *matrix);
         void sum_of_two_matrix(Matrix *matrix);
         void difference_between_matrices(Matrix *matrix);
+        Matrix *multiply_by_constant(const int constant);
         Matrix *multiply_by_matrix(Matrix *matrix);
         Matrix(int linesQuantity, int columnsQuantity);
-        ~Matrix();
         void add_line(matrix::MatrixLine *line);
         int get_lines_quantity();
         int get_columns_quantity();
@@ -29,6 +31,7 @@ namespace matrix
         void set_current_targed_column(int value);
         bool is_square_matrix();
         matrix::MatrixItem *get_item(int line, int column);
+        void set_item(int line, int column, int value);
         void add_item_matrix(const int data);
         void print_matrix(bool skipOption = false);
         bool is_in_last_position();

@@ -2,6 +2,7 @@
 #define MENU_MAIN
 
 #include <iostream>
+#include <vector>
 #include "main_utils.h"
 #include "menu_hard_disk.h"
 #include "menu_operations.h"
