@@ -217,7 +217,7 @@ std::string main_utils::MainUtils::get_first_matrix_in_matrices()
     return strToReturn;
 }
 
-std::string main_utils::MainUtils::get_next_to(std::string currentMatrixName)
+std::string main_utils::MainUtils::get_next_matrix_in_matrices(std::string currentMatrixName)
 {
     int currentNumber = this->str_to_number(
         (currentMatrixName).substr(1));

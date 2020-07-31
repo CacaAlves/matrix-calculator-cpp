@@ -145,6 +145,9 @@ void main_utils::MenuMain::print_hints()
     std::cout << std::endl
               << "\tHint 1: if you are inserting data in a matrix and would like to insert in the previous data, input \"bs\" (short for backspace).\n";
 
+    std::cout << std::endl
+              << "\tHint 2: if you are no longer using a matrix, delete it (either in list of variables or Hard Disk), you will be using less memory and (in list of variables case) will be less matrix names to keep in mind.\n";
+
     int exit = 1;
     std::cout << std::endl
               << (this->utils)->tab << "Input 0 to stop printing\n";
@@ -158,15 +161,15 @@ void main_utils::MenuMain::print_hints()
 std::string main_utils::MenuMain::receive_matrix()
 {
 
-    int lines = 0, columns = 0;
+    int lines = 1, columns = 1;
 
     std::cout << (this->utils)->tab << "Input the number of lines and then the number columns of the new matrix.\n";
 
     do
     {
-        if (lines < 0 || columns < 0)
+        if (lines <= 0 || columns <= 0)
         {
-            std::cout << (this->utils)->tab << "Input a positive number.\n";
+            std::cout << (this->utils)->tab << "Input a positive and greater than 0 number.\n";
         }
 
         std::cout << (this->utils)->tab;
@@ -177,7 +180,7 @@ std::string main_utils::MenuMain::receive_matrix()
 
         system("clear");
 
-    } while (lines < 0 || columns < 0);
+    } while (lines <= 0 || columns <= 0);
 
     matrix::Matrix *newMatrix = new matrix::Matrix(lines, columns);
 
@@ -287,7 +290,7 @@ std::string main_utils::MenuMain::print_all_matrices()
                       << ", number of columns: " << std::to_string(columnsQuantity) << std::endl;
             tempMatrix->print_matrix(isLastMatrix);
 
-            tempMatrixName = (this->utils)->get_next_to(tempMatrixName);
+            tempMatrixName = (this->utils)->get_next_matrix_in_matrices(tempMatrixName);
             tempMatrix = (this->utils)->find_matrix_in_matrices(tempMatrixName);
 
             std::cout << std::endl;

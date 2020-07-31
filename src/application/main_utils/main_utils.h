@@ -32,7 +32,7 @@ namespace main_utils
         long long int str_to_number(const std::string str);
         std::string get_greater_matrix_in_matrices();
         std::string get_first_matrix_in_matrices();
-        std::string get_next_to(std::string currentMatrixName);
+        std::string get_next_matrix_in_matrices(std::string currentMatrixName);
 
     private:
         void clear_matrices();
