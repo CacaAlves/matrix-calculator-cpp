@@ -11,6 +11,7 @@ void main_utils::MenuOperations::print_receive_menu_operations()
     std::cout << (this->utils)->tab << "4 - multiply a matrix by a constant.\n";
     std::cout << (this->utils)->tab << "5 - multiply a matrix by a matrix.\n";
     std::cout << (this->utils)->tab << "6 - is inverse.\n";
+    std::cout << (this->utils)->tab << "7 - transposed matrix.\n";
     std::cout << (this->utils)->tab << "0 - cancel.\n";
 
     std::cout << std::endl
@@ -32,6 +33,7 @@ bool main_utils::MenuOperations::is_menu_operations_a_valid_number()
     case 4:
     case 5:
     case 6:
+    case 7:
     case 0:
         isAValidNumber = true;
         break;
@@ -100,6 +102,12 @@ main_utils::ActionResponse *main_utils::MenuOperations::perform_action_menu_oper
     case 6:
     {
         std::string responseMessage = this->is_inverse_matrix();
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 7:
+    {
+        std::string responseMessage = this->transposed_matrix();
         response->set_action_response(responseMessage, true);
         break;
     }
@@ -447,6 +455,34 @@ std::string main_utils::MenuOperations::is_inverse_matrix()
     else if (strToReturn.size() == 0)
     {
         strToReturn = (this->utils)->tab + "The matrix " + matrix2Name + " is NOT inverse of matrix " + matrix1Name + "\n";
+    }
+
+    return strToReturn;
+}
+
+std::string main_utils::MenuOperations::transposed_matrix()
+{
+    std::string strToReturn;
+
+    std::string matrixName;
+
+    std::cout << (this->utils)->tab << "Input a matrix name to receive its transposed: ";
+    std::cin >> matrixName;
+
+    matrix::Matrix *matrix = (this->utils)->find_matrix_in_matrices(matrixName);
+
+    if (matrix == NULL)
+    {
+        strToReturn = (this->utils)->tab + "The matrix of the input does not exist\n";
+    }
+    else
+    {
+        matrix::Matrix *transposedMatrix = matrix->transposed_matrix();
+
+        std::string transposedMatrixName = (this->utils)->insert_matrix(transposedMatrix);
+        strToReturn = (this->utils)->tab + "The transposed matrix was stored in the constant: " + transposedMatrixName + "\n";
+
+        transposedMatrix->set_target_to_after_end();
     }
 
     return strToReturn;

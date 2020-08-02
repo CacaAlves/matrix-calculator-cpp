@@ -181,6 +181,25 @@ bool matrix::Matrix::is_inverse(Matrix *matrix)
     return isInverse;
 }
 
+matrix::Matrix *matrix::Matrix::transposed_matrix()
+{
+    matrix::Matrix *transposedMatrix = new matrix::Matrix(
+        this->columnsQuantity, this->linesQuantity
+    );
+
+
+    for (int line = 0; line < transposedMatrix->get_lines_quantity(); line++)
+    {
+        for (int column = 0; column < transposedMatrix->get_columns_quantity(); column++)
+        {
+            const int value = this->get_item(column, line)->get_data();
+            transposedMatrix->set_item(line, column, value);
+        }
+    }
+
+    return transposedMatrix;
+}
+
 bool matrix::Matrix::is_matrix_1()
 {
     bool isMatrix1;
