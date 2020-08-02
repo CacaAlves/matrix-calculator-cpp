@@ -12,6 +12,10 @@ void main_utils::MenuOperations::print_receive_menu_operations()
     std::cout << (this->utils)->tab << "5 - multiply a matrix by a matrix.\n";
     std::cout << (this->utils)->tab << "6 - is inverse.\n";
     std::cout << (this->utils)->tab << "7 - transposed matrix.\n";
+    std::cout << (this->utils)->tab << "8 - is matrix 0.\n";
+    std::cout << (this->utils)->tab << "9 - is matrix 1.\n";
+    std::cout << (this->utils)->tab << "10 - is matrix n.\n";
+    std::cout << (this->utils)->tab << "11 - is symmetric matrix.\n";
     std::cout << (this->utils)->tab << "0 - cancel.\n";
 
     std::cout << std::endl
@@ -34,6 +38,10 @@ bool main_utils::MenuOperations::is_menu_operations_a_valid_number()
     case 5:
     case 6:
     case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
     case 0:
         isAValidNumber = true;
         break;
@@ -108,6 +116,30 @@ main_utils::ActionResponse *main_utils::MenuOperations::perform_action_menu_oper
     case 7:
     {
         std::string responseMessage = this->transposed_matrix();
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 8:
+    {
+        std::string responseMessage = this->is_matrix_n(0);
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 9:
+    {
+        std::string responseMessage = this->is_matrix_n(1);
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 10:
+    {
+        std::string responseMessage = this->is_matrix_n();
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 11:
+    {
+        std::string responseMessage = this->is_symmetric_matrix();
         response->set_action_response(responseMessage, true);
         break;
     }
@@ -486,6 +518,48 @@ std::string main_utils::MenuOperations::transposed_matrix()
     }
 
     return strToReturn;
+}
+
+std::string main_utils::MenuOperations::is_matrix_n(int n)
+{
+    std::string strToReturn;
+
+    std::string matrixName;
+
+    if (n == -1)
+    {
+        std::cout << (this->utils)->tab << "Input a number: ";
+        n = this->utils->filtered_input();
+    }
+
+    std::cout << (this->utils)->tab << "Input a matrix name to verify if it's matrix " + std::to_string(n) + ": ";
+    std::cin >> matrixName;
+
+    matrix::Matrix *matrix = (this->utils)->find_matrix_in_matrices(matrixName);
+
+    if (matrix == NULL)
+    {
+        strToReturn = (this->utils)->tab + "The matrix of the input does not exist\n";
+    }
+    else
+    {
+        bool isMatrixN;
+        isMatrixN = matrix->is_matrix_n(n);
+
+        if (isMatrixN)
+        {
+            strToReturn = (this->utils)->tab + "The matrix " + matrixName + " is matrix " + std::to_string(n) + "\n";
+        }
+        else
+        {
+            strToReturn = (this->utils)->tab + "The matrix " + matrixName + " is NOT matrix " + std::to_string(n) + "\n";
+        }
+    }
+
+    return strToReturn;
+}
+std::string main_utils::MenuOperations::is_symmetric_matrix()
+{
 }
 
 void main_utils::MenuOperations::set_main_utils(main_utils::MainUtils *utils)

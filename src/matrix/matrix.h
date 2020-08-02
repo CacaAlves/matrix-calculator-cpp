@@ -23,7 +23,7 @@ namespace matrix
         Matrix *multiply_by_matrix(Matrix *matrix);
         Matrix *transposed_matrix();
         bool is_inverse(Matrix *matrix);
-        bool is_matrix_1();
+        bool is_matrix_n(int n = 1);
         Matrix(int linesQuantity, int columnsQuantity);
         void add_line(matrix::MatrixLine *line);
         int get_lines_quantity();

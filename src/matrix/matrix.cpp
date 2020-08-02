@@ -171,7 +171,7 @@ bool matrix::Matrix::is_inverse(Matrix *matrix)
 
     if (multiplicationMatrix != NULL)
     {
-        isInverse = multiplicationMatrix->is_matrix_1();
+        isInverse = multiplicationMatrix->is_matrix_n();
     }
     else
     {
@@ -200,9 +200,14 @@ matrix::Matrix *matrix::Matrix::transposed_matrix()
     return transposedMatrix;
 }
 
-bool matrix::Matrix::is_matrix_1()
-{
-    bool isMatrix1;
+bool matrix::Matrix::is_matrix_n(int n)
+{   
+    if (this->linesQuantity != this->columnsQuantity)
+    {
+        return false;
+    }
+
+    bool isMatrixN;
 
     for (int line = 0; line < this->get_lines_quantity(); line++)
     {
@@ -213,26 +218,26 @@ bool matrix::Matrix::is_matrix_1()
 
             if (isMatrixMainDiagonal)
             {
-                isMatrix1 = (value == 1);
+                isMatrixN = (value == n);
             }
             else
             {
-                isMatrix1 = (value == 0);
+                isMatrixN = (value == 0);
             }
 
-            if (!isMatrix1)
+            if (!isMatrixN)
             {
                 break;
             }
         }
 
-        if (!isMatrix1)
+        if (!isMatrixN)
         {
             break;
         }
     }
 
-    return isMatrix1;
+    return isMatrixN;
 }
 
 void matrix::Matrix::add_line(matrix::MatrixLine *line)
