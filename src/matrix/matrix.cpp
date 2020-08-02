@@ -240,6 +240,15 @@ bool matrix::Matrix::is_matrix_n(int n)
     return isMatrixN;
 }
 
+bool matrix::Matrix::is_symmetric_matrix()
+{
+    matrix::Matrix *transposedMatrix = this->transposed_matrix();
+
+    const bool isSymmetricMatrix = this->equality_between_matrices(transposedMatrix);
+
+    return isSymmetricMatrix;
+}
+
 void matrix::Matrix::add_line(matrix::MatrixLine *line)
 {
     (this->lines)->push_back(line);

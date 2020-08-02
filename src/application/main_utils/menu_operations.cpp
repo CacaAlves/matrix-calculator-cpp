@@ -560,6 +560,35 @@ std::string main_utils::MenuOperations::is_matrix_n(int n)
 }
 std::string main_utils::MenuOperations::is_symmetric_matrix()
 {
+    std::string strToReturn;
+
+    std::string matrixName;
+
+    std::cout << (this->utils)->tab << "Input a matrix name to verify if it's a symmetric matrix: ";
+    std::cin >> matrixName;
+
+    matrix::Matrix *matrix = (this->utils)->find_matrix_in_matrices(matrixName);
+
+    if (matrix == NULL)
+    {
+        strToReturn = (this->utils)->tab + "The matrix of the input does not exist\n";
+    }
+    else
+    {
+        bool isSymmetricMatrix;
+        isSymmetricMatrix = matrix->is_symmetric_matrix();
+
+        if (isSymmetricMatrix)
+        {
+            strToReturn = (this->utils)->tab + "The matrix " + matrixName + " is a symmetric matrix\n";
+        }
+        else
+        {
+            strToReturn = (this->utils)->tab + "The matrix " + matrixName + " is NOT a symmetric matrix\n";
+        }
+    }
+
+    return strToReturn;
 }
 
 void main_utils::MenuOperations::set_main_utils(main_utils::MainUtils *utils)
