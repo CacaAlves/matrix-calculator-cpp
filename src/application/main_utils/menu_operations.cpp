@@ -19,6 +19,7 @@ void main_utils::MenuOperations::print_receive_menu_operations()
     std::cout << (this->utils)->tab << "12 - is anti-symmetric matrix.\n";
     std::cout << (this->utils)->tab << "13 - is lower triangular matrix.\n";
     std::cout << (this->utils)->tab << "14 - is upper triangular matrix.\n";
+    std::cout << (this->utils)->tab << "15 - matrix power.\n";
     std::cout << (this->utils)->tab << "0 - cancel.\n";
 
     std::cout << std::endl
@@ -48,6 +49,7 @@ bool main_utils::MenuOperations::is_menu_operations_a_valid_number()
     case 12:
     case 13:
     case 14:
+    case 15:
     case 0:
         isAValidNumber = true;
         break;
@@ -164,6 +166,12 @@ main_utils::ActionResponse *main_utils::MenuOperations::perform_action_menu_oper
     case 14:
     {
         std::string responseMessage = this->is_upper_triangular_matrix_matrix();
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 15:
+    {
+        std::string responseMessage = this->matrix_power();
         response->set_action_response(responseMessage, true);
         break;
     }
@@ -708,6 +716,76 @@ std::string main_utils::MenuOperations::is_upper_triangular_matrix_matrix()
         else
         {
             strToReturn = (this->utils)->tab + "The matrix " + matrixName + " is NOT an upper triangular matrix\n";
+        }
+    }
+
+    return strToReturn;
+}
+
+std::string main_utils::MenuOperations::matrix_power()
+{
+    std::string strToReturn;
+
+    std::string matrixName;
+    int exponent = 1;
+
+    std::cout << (this->utils)->tab << "Input a matrix name: ";
+    std::cin >> matrixName;
+
+    std::cout << (this->utils)->tab << "Input a constant to be the exponent of the power: ";
+    do
+    {
+        if (exponent <= 0) //not first loop
+        {
+            std::cout << (this->utils)->tab << "Input a positive and greater than 0 number\n";
+        }
+        exponent = (this->utils)->filtered_input(1); //1 will be returned when input is NaN
+    } while (exponent <= 0);
+
+    if (exponent == 1)
+    {
+        strToReturn = (this->utils)->tab + "Did not perform the power\n";
+        return strToReturn;
+    }
+
+    matrix::Matrix *matrix = (this->utils)->find_matrix_in_matrices(matrixName);
+    matrix::Matrix *multipliedMatrix = NULL;
+
+    if (matrix == NULL)
+    {
+        strToReturn = (this->utils)->tab + "The matrix of the input does not exist\n";
+    }
+    else
+    {
+        const int lines = matrix->get_lines_quantity();
+        const int columns = matrix->get_columns_quantity();
+        multipliedMatrix = new matrix::Matrix(
+            lines, columns);
+
+        multipliedMatrix->set_to_equal_to(matrix);
+
+        for (int i = 1; i < exponent; i++)
+        {
+            matrix::Matrix *temp = multipliedMatrix;
+            multipliedMatrix = temp->multiply_by_matrix(matrix);
+
+            if (multipliedMatrix == NULL)
+            {
+                strToReturn = (this->utils)->tab + "Unable to perform the multiplication: matrix that can't be multiplied by itself\n";
+                delete temp;
+
+                break;
+            }
+
+            delete temp;
+        }
+
+        if (multipliedMatrix != NULL)
+        {
+
+            multipliedMatrix->set_target_to_after_end();
+            std::string multipliedMatrixName = (this->utils)->insert_matrix(multipliedMatrix);
+            strToReturn = (this->utils)->tab + "The matrix power was stored in the constant: " + multipliedMatrixName + "\n";
         }
     }
 
