@@ -17,6 +17,8 @@ void main_utils::MenuOperations::print_receive_menu_operations()
     std::cout << (this->utils)->tab << "10 - is matrix n.\n";
     std::cout << (this->utils)->tab << "11 - is symmetric matrix.\n";
     std::cout << (this->utils)->tab << "12 - is anti-symmetric matrix.\n";
+    std::cout << (this->utils)->tab << "13 - is lower triangular matrix.\n";
+    std::cout << (this->utils)->tab << "14 - is upper triangular matrix.\n";
     std::cout << (this->utils)->tab << "0 - cancel.\n";
 
     std::cout << std::endl
@@ -44,6 +46,8 @@ bool main_utils::MenuOperations::is_menu_operations_a_valid_number()
     case 10:
     case 11:
     case 12:
+    case 13:
+    case 14:
     case 0:
         isAValidNumber = true;
         break;
@@ -148,6 +152,18 @@ main_utils::ActionResponse *main_utils::MenuOperations::perform_action_menu_oper
     case 12:
     {
         std::string responseMessage = this->is_anti_symmetric_matrix();
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 13:
+    {
+        std::string responseMessage = this->is_lower_triangular_matrix_matrix();
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 14:
+    {
+        std::string responseMessage = this->is_upper_triangular_matrix_matrix();
         response->set_action_response(responseMessage, true);
         break;
     }
@@ -616,16 +632,82 @@ std::string main_utils::MenuOperations::is_anti_symmetric_matrix()
     }
     else
     {
-        bool isSymmetricMatrix;
-        isSymmetricMatrix = matrix->is_anti_symmetric_matrix();
+        bool isAntiSymmetricMatrix;
+        isAntiSymmetricMatrix = matrix->is_anti_symmetric_matrix();
 
-        if (isSymmetricMatrix)
+        if (isAntiSymmetricMatrix)
         {
             strToReturn = (this->utils)->tab + "The matrix " + matrixName + " is an anti-symmetric matrix\n";
         }
         else
         {
             strToReturn = (this->utils)->tab + "The matrix " + matrixName + " is NOT an anti-symmetric matrix\n";
+        }
+    }
+
+    return strToReturn;
+}
+
+std::string main_utils::MenuOperations::is_lower_triangular_matrix_matrix()
+{
+    std::string strToReturn;
+
+    std::string matrixName;
+
+    std::cout << (this->utils)->tab << "Input a matrix name to verify if it's a lower triangular matrix: ";
+    std::cin >> matrixName;
+
+    matrix::Matrix *matrix = (this->utils)->find_matrix_in_matrices(matrixName);
+
+    if (matrix == NULL)
+    {
+        strToReturn = (this->utils)->tab + "The matrix of the input does not exist\n";
+    }
+    else
+    {
+        bool isLowerTriangularMatrix;
+        isLowerTriangularMatrix = matrix->is_lower_triangular_matrix();
+
+        if (isLowerTriangularMatrix)
+        {
+            strToReturn = (this->utils)->tab + "The matrix " + matrixName + " is a lower triangular matrix\n";
+        }
+        else
+        {
+            strToReturn = (this->utils)->tab + "The matrix " + matrixName + " is NOT a lower triangular matrix\n";
+        }
+    }
+
+    return strToReturn;
+}
+
+std::string main_utils::MenuOperations::is_upper_triangular_matrix_matrix()
+{
+    std::string strToReturn;
+
+    std::string matrixName;
+
+    std::cout << (this->utils)->tab << "Input a matrix name to verify if it's an upper triangular matrix: ";
+    std::cin >> matrixName;
+
+    matrix::Matrix *matrix = (this->utils)->find_matrix_in_matrices(matrixName);
+
+    if (matrix == NULL)
+    {
+        strToReturn = (this->utils)->tab + "The matrix of the input does not exist\n";
+    }
+    else
+    {
+        bool isUpperTriangularMatrix;
+        isUpperTriangularMatrix = matrix->is_upper_triangular_matrix();
+
+        if (isUpperTriangularMatrix)
+        {
+            strToReturn = (this->utils)->tab + "The matrix " + matrixName + " is an upper triangular matrix\n";
+        }
+        else
+        {
+            strToReturn = (this->utils)->tab + "The matrix " + matrixName + " is NOT an upper triangular matrix\n";
         }
     }
 

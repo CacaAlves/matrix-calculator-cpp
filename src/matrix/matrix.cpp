@@ -184,9 +184,7 @@ bool matrix::Matrix::is_inverse(Matrix *matrix)
 matrix::Matrix *matrix::Matrix::transposed_matrix()
 {
     matrix::Matrix *transposedMatrix = new matrix::Matrix(
-        this->columnsQuantity, this->linesQuantity
-    );
-
+        this->columnsQuantity, this->linesQuantity);
 
     for (int line = 0; line < transposedMatrix->get_lines_quantity(); line++)
     {
@@ -201,7 +199,7 @@ matrix::Matrix *matrix::Matrix::transposed_matrix()
 }
 
 bool matrix::Matrix::is_matrix_n(int n)
-{   
+{
     if (this->linesQuantity != this->columnsQuantity)
     {
         return false;
@@ -260,8 +258,60 @@ bool matrix::Matrix::is_anti_symmetric_matrix()
 
     delete transposedMatrix;
     delete negativeMatrix;
-    
+
     return isAntiSymmetricMatrix;
+}
+
+bool matrix::Matrix::is_lower_triangular_matrix()
+{
+    bool isLTM = true;
+
+    for (int i = 0; i < this->get_lines_quantity(); i++)
+    {
+        for (int j = 0; j < this->get_columns_quantity(); j++)
+        {
+            const int value = this->get_item(i, j)->get_data();
+
+            if (i < j && value != 0)
+            {
+                isLTM = false;
+                break;
+            }
+        }
+
+        if (!isLTM)
+        {
+            break;
+        }
+    }
+
+    return isLTM;
+}
+
+bool matrix::Matrix::is_upper_triangular_matrix()
+{
+    bool isUTM = true;
+
+    for (int i = 0; i < this->get_lines_quantity(); i++)
+    {
+        for (int j = 0; j < this->get_columns_quantity(); j++)
+        {
+            const int value = this->get_item(i, j)->get_data();
+
+            if (i > j && value != 0)
+            {
+                isUTM = false;
+                break;
+            }
+        }
+
+        if (!isUTM)
+        {
+            break;
+        }
+    }
+
+    return isUTM;
 }
 
 void matrix::Matrix::add_line(matrix::MatrixLine *line)

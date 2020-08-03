@@ -24,6 +24,8 @@ namespace main_utils
         std::string is_matrix_n(int n = -1);
         std::string is_symmetric_matrix();
         std::string is_anti_symmetric_matrix();
+        std::string is_lower_triangular_matrix_matrix();
+        std::string is_upper_triangular_matrix_matrix();
         void set_main_utils(main_utils::MainUtils *utils);
 
     private:

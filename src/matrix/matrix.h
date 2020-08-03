@@ -26,6 +26,8 @@ namespace matrix
         bool is_matrix_n(int n = 1);
         bool is_symmetric_matrix();
         bool is_anti_symmetric_matrix();
+        bool is_lower_triangular_matrix();
+        bool is_upper_triangular_matrix();
         Matrix(int linesQuantity, int columnsQuantity);
         void add_line(matrix::MatrixLine *line);
         int get_lines_quantity();
