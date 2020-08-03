@@ -16,6 +16,7 @@ void main_utils::MenuOperations::print_receive_menu_operations()
     std::cout << (this->utils)->tab << "9 - is matrix 1.\n";
     std::cout << (this->utils)->tab << "10 - is matrix n.\n";
     std::cout << (this->utils)->tab << "11 - is symmetric matrix.\n";
+    std::cout << (this->utils)->tab << "12 - is anti-symmetric matrix.\n";
     std::cout << (this->utils)->tab << "0 - cancel.\n";
 
     std::cout << std::endl
@@ -42,6 +43,7 @@ bool main_utils::MenuOperations::is_menu_operations_a_valid_number()
     case 9:
     case 10:
     case 11:
+    case 12:
     case 0:
         isAValidNumber = true;
         break;
@@ -140,6 +142,12 @@ main_utils::ActionResponse *main_utils::MenuOperations::perform_action_menu_oper
     case 11:
     {
         std::string responseMessage = this->is_symmetric_matrix();
+        response->set_action_response(responseMessage, true);
+        break;
+    }
+    case 12:
+    {
+        std::string responseMessage = this->is_anti_symmetric_matrix();
         response->set_action_response(responseMessage, true);
         break;
     }
@@ -585,6 +593,39 @@ std::string main_utils::MenuOperations::is_symmetric_matrix()
         else
         {
             strToReturn = (this->utils)->tab + "The matrix " + matrixName + " is NOT a symmetric matrix\n";
+        }
+    }
+
+    return strToReturn;
+}
+
+std::string main_utils::MenuOperations::is_anti_symmetric_matrix()
+{
+    std::string strToReturn;
+
+    std::string matrixName;
+
+    std::cout << (this->utils)->tab << "Input a matrix name to verify if it's an anti-symmetric matrix: ";
+    std::cin >> matrixName;
+
+    matrix::Matrix *matrix = (this->utils)->find_matrix_in_matrices(matrixName);
+
+    if (matrix == NULL)
+    {
+        strToReturn = (this->utils)->tab + "The matrix of the input does not exist\n";
+    }
+    else
+    {
+        bool isSymmetricMatrix;
+        isSymmetricMatrix = matrix->is_anti_symmetric_matrix();
+
+        if (isSymmetricMatrix)
+        {
+            strToReturn = (this->utils)->tab + "The matrix " + matrixName + " is an anti-symmetric matrix\n";
+        }
+        else
+        {
+            strToReturn = (this->utils)->tab + "The matrix " + matrixName + " is NOT an anti-symmetric matrix\n";
         }
     }
 

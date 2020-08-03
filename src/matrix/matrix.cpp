@@ -246,7 +246,22 @@ bool matrix::Matrix::is_symmetric_matrix()
 
     const bool isSymmetricMatrix = this->equality_between_matrices(transposedMatrix);
 
+    delete transposedMatrix;
+
     return isSymmetricMatrix;
+}
+
+bool matrix::Matrix::is_anti_symmetric_matrix()
+{
+    matrix::Matrix *transposedMatrix = this->transposed_matrix();
+    matrix::Matrix *negativeMatrix = this->multiply_by_constant(-1);
+
+    const bool isAntiSymmetricMatrix = transposedMatrix->equality_between_matrices(negativeMatrix);
+
+    delete transposedMatrix;
+    delete negativeMatrix;
+    
+    return isAntiSymmetricMatrix;
 }
 
 void matrix::Matrix::add_line(matrix::MatrixLine *line)
