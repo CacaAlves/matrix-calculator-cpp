@@ -3,20 +3,23 @@
 main_utils::MenuMain::MenuMain()
 {
     (this->menuHardDisk) = new main_utils::MenuHardDisk();
-    (this->MenuOperations) = new main_utils::MenuOperations();
+    (this->menuOperations) = new main_utils::MenuOperations();
+    (this->menuDeterminant) = new main_utils::MenuDeterminant();
 }
 
 main_utils::MenuMain::~MenuMain()
 {
     delete (this->menuHardDisk);
-    delete (this->MenuOperations);
+    delete (this->menuOperations);
+    delete (this->menuDeterminant);
 }
 
 void main_utils::MenuMain::set_main_utils(main_utils::MainUtils *utils)
 {
     this->utils = utils;
     (this->menuHardDisk)->set_main_utils(utils);
-    (this->MenuOperations)->set_main_utils(utils);
+    (this->menuOperations)->set_main_utils(utils);
+    (this->menuDeterminant)->set_main_utils(utils);
 }
 
 void main_utils::MenuMain::welcome_message()
@@ -38,6 +41,7 @@ bool main_utils::MenuMain::is_menu_a_valid_number()
     case 5:
     case 6:
     case 7:
+    case 8:
         isAValidNumber = true;
         break;
     default:
@@ -57,9 +61,10 @@ void main_utils::MenuMain::print_receive_menu()
     std::cout << (this->utils)->tab << "2 - print a matrix.\n";
     std::cout << (this->utils)->tab << "3 - print all matrices.\n";
     std::cout << (this->utils)->tab << "4 - operations between matrices.\n";
-    std::cout << (this->utils)->tab << "5 - delete a matrix (from variables).\n";
-    std::cout << (this->utils)->tab << "6 - store / read / delete from Hard Disk.\n";
-    std::cout << (this->utils)->tab << "7 - hints.\n";
+    std::cout << (this->utils)->tab << "5 - operations with determinant.\n";
+    std::cout << (this->utils)->tab << "6 - delete a matrix (from variables).\n";
+    std::cout << (this->utils)->tab << "7 - store / read / delete from Hard Disk.\n";
+    std::cout << (this->utils)->tab << "8 - hints.\n";
     std::cout << (this->utils)->tab << "0 - exit program.\n";
 
     std::cout << std::endl
@@ -107,22 +112,27 @@ main_utils::ActionResponse *main_utils::MenuMain::perform_action_menu()
     }
     case 4:
     {
-        response = ((this->MenuOperations)->manage_operations());
+        response = ((this->menuOperations)->manage_operations());
         break;
     }
     case 5:
+    {
+        response = ((this->menuDeterminant)->manage_determinant());
+        break;
+    }
+    case 6:
     {
         response = new main_utils::ActionResponse;
         std::string responseMessage = (this->utils)->delete_matrix_from_matrices();
         response->set_action_response(responseMessage, true);
         break;
     }
-    case 6:
+    case 7:
     {
         response = (this->menuHardDisk)->manage_hard_disk();
         break;
     }
-    case 7:
+    case 8:
     {
         response = new main_utils::ActionResponse;
         this->print_hints();

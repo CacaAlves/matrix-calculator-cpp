@@ -9,6 +9,11 @@
 
 namespace matrix
 {
+    struct Determinant
+    {
+    public:
+        long int value;
+    };
     class Matrix
     {
     public:
@@ -28,6 +33,7 @@ namespace matrix
         bool is_anti_symmetric_matrix();
         bool is_lower_triangular_matrix();
         bool is_upper_triangular_matrix();
+        Determinant *calculate_determinant();
         Matrix(int linesQuantity, int columnsQuantity);
         void add_line(matrix::MatrixLine *line);
         int get_lines_quantity();

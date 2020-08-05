@@ -314,6 +314,42 @@ bool matrix::Matrix::is_upper_triangular_matrix()
     return isUTM;
 }
 
+matrix::Determinant *matrix::Matrix::calculate_determinant()
+{
+    if (this->linesQuantity != this->columnsQuantity)
+    {
+        return NULL;
+    }
+
+    const int matrixOrder = this->linesQuantity;
+    matrix::Determinant *determinant = new matrix::Determinant;
+
+    switch (matrixOrder)
+    {
+    case 1:
+    {
+
+        determinant->value = this->get_item(0, 0)->get_data();
+        break;
+    }
+    case 2:
+    {
+
+        const int mainDiagonalMultiplication = (this->get_item(0, 0)->get_data() *
+                                                this->get_item(1, 1)->get_data());
+        const int crossDiagonalMultiplication = (this->get_item(1, 0)->get_data() *
+                                                 this->get_item(0, 1)->get_data());
+
+        determinant->value = (mainDiagonalMultiplication - crossDiagonalMultiplication);
+        break;
+    }
+    default:
+        break;
+    }
+
+    return determinant;
+}
+
 void matrix::Matrix::add_line(matrix::MatrixLine *line)
 {
     (this->lines)->push_back(line);

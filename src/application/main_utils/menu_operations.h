@@ -11,6 +11,11 @@ namespace main_utils
     {
     public:
         ActionResponse *manage_operations();
+        void set_main_utils(main_utils::MainUtils *utils);
+
+    private:
+        int menuOperations;
+        main_utils::MainUtils *utils;
         void print_receive_menu_operations();
         bool is_menu_operations_a_valid_number();
         ActionResponse *perform_action_menu_operations();
@@ -27,11 +32,6 @@ namespace main_utils
         std::string is_lower_triangular_matrix_matrix();
         std::string is_upper_triangular_matrix_matrix();
         std::string matrix_power();
-        void set_main_utils(main_utils::MainUtils *utils);
-
-    private:
-        main_utils::MainUtils *utils;
-        int menuOperations;
     };
 } // namespace main_utils
 

@@ -6,6 +6,7 @@
 #include "main_utils.h"
 #include "menu_hard_disk.h"
 #include "menu_operations.h"
+#include "menu_determinant.h"
 
 namespace main_utils
 {
@@ -22,7 +23,8 @@ namespace main_utils
         ActionResponse *perform_action_menu();
     private:
         main_utils::MenuHardDisk *menuHardDisk;
-        main_utils::MenuOperations *MenuOperations;
+        main_utils::MenuOperations *menuOperations;
+        main_utils::MenuDeterminant *menuDeterminant;
         main_utils::MainUtils *utils;
         std::string receive_matrix();
         std::string print_matrix();
